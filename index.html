@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuvola365 - Mobile Desktop Workspace</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
+</head>
+<body>
+  <div id="desktop">
+    <!-- Optional subtle overlay for signed-out state -->
+    <div id="welcome-overlay" class="overlay">
+      <div class="welcome-content">
+        <h1>Nuvola365</h1>
+        <p>Your mobile device → full desktop workspace</p>
+        <button onclick="signIn()">Get Started – Sign in with Microsoft</button>
+      </div>
+    </div>
+
+    <!-- Desktop icons -->
+    <div id="icons-grid">
+      <div class="desktop-icon" onclick="launchApp('cloud-pc')">
+        <i class="fas fa-cloud fa-3x"></i>
+        <span>Cloud PC</span>
+      </div>
+      <div class="desktop-icon" onclick="launchApp('remote-app')">
+        <i class="fas fa-th-large fa-3x"></i>
+        <span>Remote Apps</span>
+      </div>
+    </div>
+
+    <!-- Start panel -->
+    <div id="start-panel" class="panel hidden">
+      <div class="panel-header">
+        <h2>Nuvola365</h2>
+        <button onclick="togglePanel()" class="close-btn"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="panel-section">
+        <h3>Quick Launch</h3>
+        <button onclick="launchApp('cloud-pc')" class="app-btn">
+          <i class="fas fa-desktop"></i> Windows 365 Cloud PC
+        </button>
+        <button onclick="launchApp('remote-app')" class="app-btn">
+          <i class="fas fa-window-restore"></i> Azure Virtual Desktop Apps
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <button id="start-btn" onclick="togglePanel()">
+      <i class="fab fa-microsoft"></i> Start
+    </button>
+    <div id="taskbar-apps"></div>
+    <div id="taskbar-right">
+      <div id="clock"></div>
+      <button id="sign-in-btn" onclick="signIn()">Sign in</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
