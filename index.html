@@ -1,63 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nuvola365 - Mobile Desktop Workspace</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0e1a">
+  <title>Nuvola365 Workspace</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-  <div id="desktop">
-    <!-- Optional subtle overlay for signed-out state -->
-    <div id="welcome-overlay" class="overlay">
-      <div class="welcome-content">
-        <h1>Nuvola365</h1>
-        <p>Your mobile device → full desktop workspace</p>
-        <button onclick="signIn()">Get Started – Sign in with Microsoft</button>
+  <!-- Login Splash -->
+  <div id="splash" class="splash">
+    <div class="splash-bg"></div>
+    <div class="splash-content">
+      <div class="logo-animation">
+        <svg class="logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4dabff;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="50" fill="url(#logoGradient)" opacity="0.2"/>
+          <path d="M 40 50 L 60 35 L 80 50 L 80 75 L 60 90 L 40 75 Z" fill="url(#logoGradient)" stroke="#4dabff" stroke-width="2"/>
+          <circle cx="60" cy="60" r="8" fill="#fff"/>
+        </svg>
       </div>
+      <h1 class="splash-title">Nuvola365</h1>
+      <p class="splash-subtitle">Your cloud workspace, anywhere</p>
+      <div class="splash-actions">
+        <button class="btn btn-primary" id="loginBtn">
+          <i class="fab fa-microsoft"></i>
+          <span>Sign in with Microsoft</span>
+        </button>
+        <button class="btn btn-secondary" id="signupBtn">
+          <span>Create Account</span>
+        </button>
+      </div>
+      <p class="splash-hint">Works on any device • No downloads needed</p>
     </div>
+  </div>
 
-    <!-- Desktop icons -->
-    <div id="icons-grid">
-      <div class="desktop-icon" onclick="launchApp('cloud-pc')">
-        <i class="fas fa-cloud fa-3x"></i>
+  <!-- Main Workspace -->
+  <div id="workspace" class="workspace hidden">
+    <!-- Background -->
+    <div class="workspace-bg"></div>
+
+    <!-- App Icons (for larger screens) -->
+    <div class="app-grid" id="appGrid">
+      <div class="app-icon" data-app="cloud-pc">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-desktop"></i>
         <span>Cloud PC</span>
       </div>
-      <div class="desktop-icon" onclick="launchApp('remote-app')">
-        <i class="fas fa-th-large fa-3x"></i>
+      <div class="app-icon" data-app="remote-apps">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-th-large"></i>
         <span>Remote Apps</span>
+      </div>
+      <div class="app-icon" data-app="word">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-file-word"></i>
+        <span>Word</span>
+      </div>
+      <div class="app-icon" data-app="excel">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-file-excel"></i>
+        <span>Excel</span>
+      </div>
+      <div class="app-icon" data-app="powerpoint">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-file-powerpoint"></i>
+        <span>PowerPoint</span>
+      </div>
+      <div class="app-icon" data-app="teams">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-users"></i>
+        <span>Teams</span>
+      </div>
+      <div class="app-icon" data-app="onedrive">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-cloud"></i>
+        <span>OneDrive</span>
+      </div>
+      <div class="app-icon" data-app="outlook">
+        <div class="app-icon-bg"></div>
+        <i class="fas fa-envelope"></i>
+        <span>Outlook</span>
       </div>
     </div>
 
-    <!-- Start panel -->
-    <div id="start-panel" class="panel hidden">
-      <div class="panel-header">
-        <h2>Nuvola365</h2>
-        <button onclick="togglePanel()" class="close-btn"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="panel-section">
-        <h3>Quick Launch</h3>
-        <button onclick="launchApp('cloud-pc')" class="app-btn">
-          <i class="fas fa-desktop"></i> Windows 365 Cloud PC
+    <!-- Window Container -->
+    <div class="window-container" id="windowContainer"></div>
+
+    <!-- App Launcher (Mobile) -->
+    <div class="app-launcher hidden" id="appLauncher">
+      <div class="launcher-header">
+        <h2>Apps</h2>
+        <button class="launcher-close" id="launcherClose">
+          <i class="fas fa-times"></i>
         </button>
-        <button onclick="launchApp('remote-app')" class="app-btn">
-          <i class="fas fa-window-restore"></i> Azure Virtual Desktop Apps
+      </div>
+      <div class="launcher-grid">
+        <div class="launcher-app" data-app="cloud-pc">
+          <i class="fas fa-desktop"></i>
+          <span>Cloud PC</span>
+        </div>
+        <div class="launcher-app" data-app="remote-apps">
+          <i class="fas fa-th-large"></i>
+          <span>Remote Apps</span>
+        </div>
+        <div class="launcher-app" data-app="word">
+          <i class="fas fa-file-word"></i>
+          <span>Word</span>
+        </div>
+        <div class="launcher-app" data-app="excel">
+          <i class="fas fa-file-excel"></i>
+          <span>Excel</span>
+        </div>
+        <div class="launcher-app" data-app="powerpoint">
+          <i class="fas fa-file-powerpoint"></i>
+          <span>PowerPoint</span>
+        </div>
+        <div class="launcher-app" data-app="teams">
+          <i class="fas fa-users"></i>
+          <span>Teams</span>
+        </div>
+        <div class="launcher-app" data-app="onedrive">
+          <i class="fas fa-cloud"></i>
+          <span>OneDrive</span>
+        </div>
+        <div class="launcher-app" data-app="outlook">
+          <i class="fas fa-envelope"></i>
+          <span>Outlook</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar" id="taskbar">
+      <button class="taskbar-menu" id="menuBtn">
+        <i class="fas fa-grip-vertical"></i>
+        <span class="taskbar-menu-text">Apps</span>
+      </button>
+      
+      <div class="taskbar-apps" id="taskbarApps">
+        <!-- Running apps will appear here -->
+      </div>
+
+      <div class="taskbar-system">
+        <div class="system-time" id="systemTime">--:--</div>
+        <button class="system-user" id="systemUser">
+          <i class="fas fa-user-circle"></i>
+          <span class="system-user-name">User</span>
         </button>
       </div>
     </div>
   </div>
 
-  <div id="taskbar">
-    <button id="start-btn" onclick="togglePanel()">
-      <i class="fab fa-microsoft"></i> Start
-    </button>
-    <div id="taskbar-apps"></div>
-    <div id="taskbar-right">
-      <div id="clock"></div>
-      <button id="sign-in-btn" onclick="signIn()">Sign in</button>
+  <!-- Context Menu (for desktop mode) -->
+  <div class="context-menu hidden" id="contextMenu">
+    <div class="context-item" data-action="minimize">
+      <i class="fas fa-window-minimize"></i>
+      <span>Minimize</span>
+    </div>
+    <div class="context-item" data-action="maximize">
+      <i class="fas fa-window-maximize"></i>
+      <span>Maximize</span>
+    </div>
+    <div class="context-item" data-action="close">
+      <i class="fas fa-times"></i>
+      <span>Close</span>
     </div>
   </div>
 

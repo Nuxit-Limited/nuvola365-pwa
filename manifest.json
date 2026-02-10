@@ -1,20 +1,70 @@
 {
-  "name": "Nuvola365",
+  "name": "Nuvola365 Workspace",
   "short_name": "Nuvola365",
-  "start_url": ".",
+  "description": "Cloud-powered mobile workspace for Windows apps and desktops",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "orientation": "any",
+  "background_color": "#0a0e1a",
+  "theme_color": "#4dabff",
+  "categories": ["productivity", "business", "utilities"],
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Open Cloud PC",
+      "short_name": "Cloud PC",
+      "description": "Launch your Windows 365 Cloud PC",
+      "url": "/?app=cloud-pc",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Remote Apps",
+      "short_name": "Apps",
+      "description": "Access your Azure Virtual Desktop apps",
+      "url": "/?app=remote-apps",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "lang": "en-US",
+  "dir": "ltr"
 }
