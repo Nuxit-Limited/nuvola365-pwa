@@ -1,23 +1,23 @@
 {
-  "name": "Nuvola365 Workspace",
+  "name": "Nuvola365 Desktop",
   "short_name": "Nuvola365",
-  "description": "Cloud-powered mobile workspace for Windows apps and desktops",
+  "description": "Samsung DeX-inspired cloud desktop workspace",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0a0e1a",
-  "theme_color": "#4dabff",
+  "background_color": "#1a1d29",
+  "theme_color": "#2196f3",
   "categories": ["productivity", "business", "utilities"],
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "https://via.placeholder.com/192/2196f3/ffffff?text=N365",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "https://via.placeholder.com/512/2196f3/ffffff?text=N365",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -25,46 +25,28 @@
   ],
   "shortcuts": [
     {
-      "name": "Open Cloud PC",
+      "name": "Open Files",
+      "short_name": "Files",
+      "description": "Browse your files",
+      "url": "/?app=files",
+      "icons": [{ "src": "https://via.placeholder.com/192/FFA726/ffffff?text=F", "sizes": "192x192" }]
+    },
+    {
+      "name": "Cloud PC",
       "short_name": "Cloud PC",
-      "description": "Launch your Windows 365 Cloud PC",
+      "description": "Launch Windows 365",
       "url": "/?app=cloud-pc",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "https://via.placeholder.com/192/0078d4/ffffff?text=PC", "sizes": "192x192" }]
     },
     {
-      "name": "Remote Apps",
-      "short_name": "Apps",
-      "description": "Access your Azure Virtual Desktop apps",
-      "url": "/?app=remote-apps",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshot-desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
+      "name": "Notes",
+      "short_name": "Notes",
+      "description": "Create a new note",
+      "url": "/?app=notepad",
+      "icons": [{ "src": "https://via.placeholder.com/192/66BB6A/ffffff?text=N", "sizes": "192x192" }]
     }
   ],
   "prefer_related_applications": false,
-  "related_applications": [],
   "lang": "en-US",
   "dir": "ltr"
 }

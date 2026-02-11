@@ -5,178 +5,257 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0a0e1a">
-  <title>Nuvola365 Workspace</title>
+  <meta name="theme-color" content="#1a1d29">
+  <title>Nuvola365 Desktop</title>
   <link rel="manifest" href="manifest.json"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="dex-style.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Login Splash -->
-  <div id="splash" class="splash">
-    <div class="splash-bg"></div>
-    <div class="splash-content">
-      <div class="logo-animation">
-        <svg class="logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#4dabff;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <circle cx="60" cy="60" r="50" fill="url(#logoGradient)" opacity="0.2"/>
-          <path d="M 40 50 L 60 35 L 80 50 L 80 75 L 60 90 L 40 75 Z" fill="url(#logoGradient)" stroke="#4dabff" stroke-width="2"/>
-          <circle cx="60" cy="60" r="8" fill="#fff"/>
-        </svg>
-      </div>
-      <h1 class="splash-title">Nuvola365</h1>
-      <p class="splash-subtitle">Your cloud workspace, anywhere</p>
-      <div class="splash-actions">
-        <button class="btn btn-primary" id="loginBtn">
+  <!-- Login Screen -->
+  <div id="lockscreen" class="lockscreen">
+    <div class="lockscreen-bg"></div>
+    <div class="lockscreen-content">
+      <div class="lock-time" id="lockTime">12:00</div>
+      <div class="lock-date" id="lockDate">Monday, January 1</div>
+      <div class="lock-user">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-name">Guest User</div>
+        <button class="lock-signin" id="lockSignin">
           <i class="fab fa-microsoft"></i>
           <span>Sign in with Microsoft</span>
         </button>
-        <button class="btn btn-secondary" id="signupBtn">
-          <span>Create Account</span>
-        </button>
       </div>
-      <p class="splash-hint">Works on any device • No downloads needed</p>
+      <div class="lock-hint">
+        <i class="fas fa-arrow-up"></i>
+        Swipe up or click to unlock
+      </div>
     </div>
   </div>
 
-  <!-- Main Workspace -->
-  <div id="workspace" class="workspace hidden">
-    <!-- Background -->
-    <div class="workspace-bg"></div>
+  <!-- Desktop Environment -->
+  <div id="desktop" class="desktop hidden">
+    <!-- Wallpaper -->
+    <div class="wallpaper" id="wallpaper"></div>
 
-    <!-- App Icons (for larger screens) -->
-    <div class="app-grid" id="appGrid">
-      <div class="app-icon" data-app="cloud-pc">
-        <div class="app-icon-bg"></div>
+    <!-- Desktop Icons -->
+    <div class="desktop-icons" id="desktopIcons">
+      <div class="desktop-icon" data-app="files">
+        <i class="fas fa-folder"></i>
+        <span>Files</span>
+      </div>
+      <div class="desktop-icon" data-app="cloud-pc">
         <i class="fas fa-desktop"></i>
         <span>Cloud PC</span>
       </div>
-      <div class="app-icon" data-app="remote-apps">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-th-large"></i>
-        <span>Remote Apps</span>
+      <div class="desktop-icon" data-app="browser">
+        <i class="fas fa-globe"></i>
+        <span>Browser</span>
       </div>
-      <div class="app-icon" data-app="word">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-file-word"></i>
-        <span>Word</span>
-      </div>
-      <div class="app-icon" data-app="excel">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-file-excel"></i>
-        <span>Excel</span>
-      </div>
-      <div class="app-icon" data-app="powerpoint">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-file-powerpoint"></i>
-        <span>PowerPoint</span>
-      </div>
-      <div class="app-icon" data-app="teams">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-users"></i>
-        <span>Teams</span>
-      </div>
-      <div class="app-icon" data-app="onedrive">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-cloud"></i>
-        <span>OneDrive</span>
-      </div>
-      <div class="app-icon" data-app="outlook">
-        <div class="app-icon-bg"></div>
-        <i class="fas fa-envelope"></i>
-        <span>Outlook</span>
+      <div class="desktop-icon" data-app="notepad">
+        <i class="fas fa-file-alt"></i>
+        <span>Notes</span>
       </div>
     </div>
 
     <!-- Window Container -->
-    <div class="window-container" id="windowContainer"></div>
+    <div class="windows-layer" id="windowsLayer"></div>
 
-    <!-- App Launcher (Mobile) -->
-    <div class="app-launcher hidden" id="appLauncher">
-      <div class="launcher-header">
+    <!-- App Drawer -->
+    <div class="app-drawer hidden" id="appDrawer">
+      <div class="drawer-header">
         <h2>Apps</h2>
-        <button class="launcher-close" id="launcherClose">
+        <button class="drawer-close" id="drawerClose">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="launcher-grid">
-        <div class="launcher-app" data-app="cloud-pc">
-          <i class="fas fa-desktop"></i>
-          <span>Cloud PC</span>
+      <div class="drawer-search">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search apps..." id="appSearch">
+      </div>
+      <div class="drawer-grid" id="drawerGrid">
+        <!-- System Apps -->
+        <div class="drawer-section">
+          <h3>System</h3>
+          <div class="drawer-apps">
+            <div class="drawer-app" data-app="files">
+              <i class="fas fa-folder"></i>
+              <span>Files</span>
+            </div>
+            <div class="drawer-app" data-app="settings">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </div>
+            <div class="drawer-app" data-app="browser">
+              <i class="fas fa-globe"></i>
+              <span>Browser</span>
+            </div>
+            <div class="drawer-app" data-app="notepad">
+              <i class="fas fa-file-alt"></i>
+              <span>Notes</span>
+            </div>
+            <div class="drawer-app" data-app="calculator">
+              <i class="fas fa-calculator"></i>
+              <span>Calculator</span>
+            </div>
+            <div class="drawer-app" data-app="calendar">
+              <i class="fas fa-calendar"></i>
+              <span>Calendar</span>
+            </div>
+            <div class="drawer-app" data-app="photos">
+              <i class="fas fa-images"></i>
+              <span>Photos</span>
+            </div>
+            <div class="drawer-app" data-app="music">
+              <i class="fas fa-music"></i>
+              <span>Music</span>
+            </div>
+          </div>
         </div>
-        <div class="launcher-app" data-app="remote-apps">
-          <i class="fas fa-th-large"></i>
-          <span>Remote Apps</span>
-        </div>
-        <div class="launcher-app" data-app="word">
-          <i class="fas fa-file-word"></i>
-          <span>Word</span>
-        </div>
-        <div class="launcher-app" data-app="excel">
-          <i class="fas fa-file-excel"></i>
-          <span>Excel</span>
-        </div>
-        <div class="launcher-app" data-app="powerpoint">
-          <i class="fas fa-file-powerpoint"></i>
-          <span>PowerPoint</span>
-        </div>
-        <div class="launcher-app" data-app="teams">
-          <i class="fas fa-users"></i>
-          <span>Teams</span>
-        </div>
-        <div class="launcher-app" data-app="onedrive">
-          <i class="fas fa-cloud"></i>
-          <span>OneDrive</span>
-        </div>
-        <div class="launcher-app" data-app="outlook">
-          <i class="fas fa-envelope"></i>
-          <span>Outlook</span>
+
+        <!-- Cloud Apps -->
+        <div class="drawer-section">
+          <h3>Microsoft 365</h3>
+          <div class="drawer-apps">
+            <div class="drawer-app" data-app="cloud-pc">
+              <i class="fas fa-desktop"></i>
+              <span>Cloud PC</span>
+            </div>
+            <div class="drawer-app" data-app="remote-apps">
+              <i class="fas fa-th-large"></i>
+              <span>Remote Apps</span>
+            </div>
+            <div class="drawer-app" data-app="word">
+              <i class="fas fa-file-word"></i>
+              <span>Word</span>
+            </div>
+            <div class="drawer-app" data-app="excel">
+              <i class="fas fa-file-excel"></i>
+              <span>Excel</span>
+            </div>
+            <div class="drawer-app" data-app="powerpoint">
+              <i class="fas fa-file-powerpoint"></i>
+              <span>PowerPoint</span>
+            </div>
+            <div class="drawer-app" data-app="teams">
+              <i class="fas fa-users"></i>
+              <span>Teams</span>
+            </div>
+            <div class="drawer-app" data-app="outlook">
+              <i class="fas fa-envelope"></i>
+              <span>Outlook</span>
+            </div>
+            <div class="drawer-app" data-app="onedrive">
+              <i class="fas fa-cloud"></i>
+              <span>OneDrive</span>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Quick Settings -->
+    <div class="quick-settings hidden" id="quickSettings">
+      <div class="qs-header">
+        <h3>Quick Settings</h3>
+      </div>
+      <div class="qs-tiles">
+        <div class="qs-tile active" data-setting="wifi">
+          <i class="fas fa-wifi"></i>
+          <span>Wi-Fi</span>
+        </div>
+        <div class="qs-tile" data-setting="bluetooth">
+          <i class="fas fa-bluetooth"></i>
+          <span>Bluetooth</span>
+        </div>
+        <div class="qs-tile" data-setting="dnd">
+          <i class="fas fa-moon"></i>
+          <span>Do Not Disturb</span>
+        </div>
+        <div class="qs-tile active" data-setting="brightness">
+          <i class="fas fa-sun"></i>
+          <span>Auto Brightness</span>
+        </div>
+      </div>
+      <div class="qs-sliders">
+        <div class="qs-slider">
+          <i class="fas fa-volume-up"></i>
+          <input type="range" min="0" max="100" value="50" id="volumeSlider">
+          <span id="volumeValue">50%</span>
+        </div>
+        <div class="qs-slider">
+          <i class="fas fa-lightbulb"></i>
+          <input type="range" min="0" max="100" value="80" id="brightnessSlider">
+          <span id="brightnessValue">80%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel hidden" id="notificationsPanel">
+      <div class="notif-header">
+        <h3>Notifications</h3>
+        <button class="notif-clear" id="notifClear">Clear all</button>
+      </div>
+      <div class="notif-list" id="notifList">
+        <div class="notif-empty">
+          <i class="fas fa-bell-slash"></i>
+          <p>No notifications</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu hidden" id="contextMenu">
+      <!-- Dynamic content -->
     </div>
 
     <!-- Taskbar -->
     <div class="taskbar" id="taskbar">
-      <button class="taskbar-menu" id="menuBtn">
-        <i class="fas fa-grip-vertical"></i>
-        <span class="taskbar-menu-text">Apps</span>
-      </button>
-      
-      <div class="taskbar-apps" id="taskbarApps">
-        <!-- Running apps will appear here -->
-      </div>
-
-      <div class="taskbar-system">
-        <div class="system-time" id="systemTime">--:--</div>
-        <button class="system-user" id="systemUser">
-          <i class="fas fa-user-circle"></i>
-          <span class="system-user-name">User</span>
+      <div class="taskbar-left">
+        <button class="taskbar-btn app-launcher-btn" id="appLauncherBtn" title="Apps">
+          <i class="fas fa-th"></i>
         </button>
+        <div class="taskbar-separator"></div>
+        <div class="taskbar-apps" id="taskbarApps">
+          <!-- Running apps appear here -->
+        </div>
+      </div>
+
+      <div class="taskbar-center">
+        <div class="search-box" id="searchBox">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search apps, files..." id="searchInput">
+        </div>
+      </div>
+
+      <div class="taskbar-right">
+        <div class="system-tray">
+          <button class="tray-icon" id="notifBtn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge hidden" id="notifBadge">0</span>
+          </button>
+          <button class="tray-icon" id="quickSettingsBtn" title="Quick Settings">
+            <i class="fas fa-sliders-h"></i>
+          </button>
+          <div class="tray-separator"></div>
+          <div class="system-clock" id="systemClock">
+            <div class="clock-time">12:00</div>
+            <div class="clock-date">Mon 1/1</div>
+          </div>
+          <div class="tray-separator"></div>
+          <button class="user-menu-btn" id="userMenuBtn">
+            <i class="fas fa-user-circle"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Context Menu (for desktop mode) -->
-  <div class="context-menu hidden" id="contextMenu">
-    <div class="context-item" data-action="minimize">
-      <i class="fas fa-window-minimize"></i>
-      <span>Minimize</span>
-    </div>
-    <div class="context-item" data-action="maximize">
-      <i class="fas fa-window-maximize"></i>
-      <span>Maximize</span>
-    </div>
-    <div class="context-item" data-action="close">
-      <i class="fas fa-times"></i>
-      <span>Close</span>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+  <script src="dex-apps.js"></script>
+  <script src="dex-main.js"></script>
 </body>
 </html>
