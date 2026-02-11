@@ -1,5 +1,6 @@
 // ============================================
-// NUVOLA OS - System Orchestration
+// NUVOLA365 - System Orchestration
+// Cloud Desktop for AVD & Windows 365
 // ============================================
 
 const System = {
@@ -8,29 +9,23 @@ const System = {
   activeWindow: null,
   isDragging: false,
   dragWindow: null,
-  dragOffset: { x: 0, y: 0 }
+  dragOffset: { x: 0, y: 0 },
+  cloudConnected: true
 };
 
-// ==================== BOOT SEQUENCE ====================
-
+// Boot & Login
 document.addEventListener('DOMContentLoaded', () => {
   bootSystem();
 });
 
 function bootSystem() {
-  // Boot animation
   setTimeout(() => {
     document.getElementById('bootScreen').classList.add('hidden');
     document.getElementById('loginScreen').classList.remove('hidden');
   }, 3500);
 }
 
-// ==================== LOGIN ====================
-
 document.getElementById('loginBtn')?.addEventListener('click', login);
-document.getElementById('loginPassword')?.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') login();
-});
 
 function login() {
   document.getElementById('loginScreen').classList.add('hidden');
@@ -43,14 +38,14 @@ function login() {
   }, 50);
   
   setTimeout(() => {
-    showNotification('Welcome to Nuvola OS', 'System ready');
+    showNotification('Connected to Microsoft Cloud', 'Windows 365 and Azure VD ready');
   }, 1000);
   
   initializeDesktop();
 }
 
 function logout() {
-  if (confirm('Are you sure you want to log out?')) {
+  if (confirm('Sign out from Microsoft Cloud?')) {
     location.reload();
   }
 }
@@ -60,10 +55,8 @@ function lockScreen() {
   document.getElementById('loginScreen').classList.remove('hidden');
 }
 
-// ==================== DESKTOP INITIALIZATION ====================
-
+// Desktop Initialization
 function initializeDesktop() {
-  // Clock
   updateClock();
   setInterval(updateClock, 1000);
   
@@ -89,19 +82,21 @@ function initializeDesktop() {
     });
   });
   
-  // Activities button
+  // Activities
   document.getElementById('activitiesBtn')?.addEventListener('click', toggleActivitiesOverview);
+  document.getElementById('activitiesClose')?.addEventListener('click', closeActivitiesOverview);
   
-  // Show desktop
-  document.getElementById('showDesktop')?.addEventListener('click', showDesktop);
-  
-  // User menu
+  // Menus
   document.getElementById('userMenuBtn')?.addEventListener('click', toggleSystemMenu);
+  document.getElementById('cloudConnBtn')?.addEventListener('click', toggleCloudPanel);
   
-  // Click outside to close menus
+  // Close menus on outside click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#systemMenu') && !e.target.closest('#userMenuBtn')) {
       document.getElementById('systemMenu')?.classList.add('hidden');
+    }
+    if (!e.target.closest('#cloudPanel') && !e.target.closest('#cloudConnBtn')) {
+      document.getElementById('cloudPanel')?.classList.add('hidden');
     }
   });
   
@@ -124,7 +119,7 @@ function initializeDesktop() {
     });
   });
   
-  // ESC to close activities
+  // ESC key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeActivitiesOverview();
@@ -132,8 +127,7 @@ function initializeDesktop() {
   });
 }
 
-// ==================== CLOCK ====================
-
+// Clock
 function updateClock() {
   const now = new Date();
   const clock = document.getElementById('topBarClock');
@@ -159,8 +153,7 @@ function updateClock() {
   }
 }
 
-// ==================== APP MANAGEMENT ====================
-
+// App Management
 function openApp(appId, options = {}) {
   const app = Applications[appId];
   if (!app) {
@@ -168,10 +161,20 @@ function openApp(appId, options = {}) {
     return;
   }
   
-  // If cloud app, open in new tab
-  if (app.isCloud) {
-    window.open(app.url, '_blank');
-    showNotification(app.name, 'Opening in new tab...');
+  // Cloud apps open in new tabs
+  if (app.isCloudApp && app.openInTab) {
+    const width = 1400;
+    const height = 900;
+    const left = (screen.width - width) / 2;
+    const top = (screen.height - height) / 2;
+    
+    window.open(
+      app.url,
+      '_blank',
+      `width=${width},height=${height},left=${left},top=${top},resizable=yes`
+    );
+    
+    showNotification(app.name, `Opening ${app.description}...`);
     return;
   }
   
@@ -191,11 +194,11 @@ function createWindow(appId, app, options = {}) {
   windowEl.id = windowId;
   windowEl.style.zIndex = System.windowZIndex++;
   
-  // Default size and position
-  const width = 800;
-  const height = 600;
+  // Size and position
+  const width = 900;
+  const height = 650;
   const left = (window.innerWidth - width) / 2 + (System.windows.size * 30);
-  const top = 100 + (System.windows.size * 30);
+  const top = 120 + (System.windows.size * 30);
   
   windowEl.style.width = `${width}px`;
   windowEl.style.height = `${height}px`;
@@ -219,16 +222,14 @@ function createWindow(appId, app, options = {}) {
   
   document.getElementById('windowsContainer').appendChild(windowEl);
   
-  // Render app content
+  // Render app
   const container = windowEl.querySelector('.window-content');
   if (app.render) {
     app.render(container, windowId, options);
   }
   
-  // Setup window controls
   setupWindowControls(windowEl, appId, windowId);
   
-  // Store window
   System.windows.set(appId, {
     element: windowEl,
     app: app,
@@ -237,7 +238,6 @@ function createWindow(appId, app, options = {}) {
     isMaximized: false
   });
   
-  // Add to top bar
   addToTopBar(appId, app);
   updateDock();
   focusWindow(appId);
@@ -267,17 +267,15 @@ function setupWindowControls(windowEl, appId, windowId) {
 
 function focusWindow(appId) {
   const win = System.windows.get(appId);
-  if (!win || win.isMinimized) {
-    if (win?.isMinimized) {
-      win.element.classList.remove('minimized');
-      win.isMinimized = false;
-    }
+  if (!win) return;
+  
+  if (win.isMinimized) {
+    win.element.classList.remove('minimized');
+    win.isMinimized = false;
   }
   
-  if (win) {
-    win.element.style.zIndex = System.windowZIndex++;
-    System.activeWindow = appId;
-  }
+  win.element.style.zIndex = System.windowZIndex++;
+  System.activeWindow = appId;
   
   updateTopBar();
 }
@@ -309,8 +307,7 @@ function closeWindow(appId) {
   }
 }
 
-// ==================== WINDOW DRAGGING ====================
-
+// Window Dragging
 function startDragging(appId, e) {
   const win = System.windows.get(appId);
   if (!win || win.isMaximized) return;
@@ -334,7 +331,7 @@ function handleDragging(e) {
   if (!win) return;
   
   const x = e.clientX - System.dragOffset.x;
-  const y = Math.max(32, e.clientY - System.dragOffset.y);
+  const y = Math.max(36, e.clientY - System.dragOffset.y);
   
   win.element.style.left = `${x}px`;
   win.element.style.top = `${y}px`;
@@ -345,8 +342,7 @@ function stopDragging() {
   System.dragWindow = null;
 }
 
-// ==================== TOP BAR ====================
-
+// Top Bar
 function addToTopBar(appId, app) {
   const topBarApps = document.getElementById('topBarApps');
   
@@ -379,8 +375,7 @@ function updateTopBar() {
   });
 }
 
-// ==================== DOCK ====================
-
+// Dock
 function updateDock() {
   document.querySelectorAll('.dock-app[data-app]').forEach(btn => {
     const appId = btn.dataset.app;
@@ -388,8 +383,7 @@ function updateDock() {
   });
 }
 
-// ==================== ACTIVITIES OVERVIEW ====================
-
+// Activities
 function toggleActivitiesOverview() {
   const overview = document.getElementById('activitiesOverview');
   const btn = document.getElementById('activitiesBtn');
@@ -407,23 +401,22 @@ function closeActivitiesOverview() {
   document.getElementById('activitiesBtn')?.classList.remove('active');
 }
 
-function showDesktop() {
-  System.windows.forEach(win => {
-    if (!win.isMinimized) {
-      minimizeWindow(win.element.id.replace('window-', ''));
-    }
-  });
-}
-
-// ==================== SYSTEM MENU ====================
-
+// Menus
 function toggleSystemMenu() {
   const menu = document.getElementById('systemMenu');
   menu.classList.toggle('hidden');
 }
 
-// ==================== CONTEXT MENU ====================
+function toggleCloudPanel() {
+  const panel = document.getElementById('cloudPanel');
+  panel.classList.toggle('hidden');
+}
 
+function closeCloudPanel() {
+  document.getElementById('cloudPanel')?.classList.add('hidden');
+}
+
+// Context Menu
 function handleContextMenu(e) {
   if (e.target.closest('.window, .top-bar, .dock')) return;
   
@@ -434,13 +427,17 @@ function handleContextMenu(e) {
 function showContextMenu(x, y) {
   const menu = document.getElementById('contextMenu');
   menu.innerHTML = `
+    <div class="context-item" onclick="openApp('cloud-pc'); closeContextMenu()">
+      <i class="fas fa-desktop"></i>
+      <span>Open Windows 365</span>
+    </div>
+    <div class="context-item" onclick="openApp('avd'); closeContextMenu()">
+      <i class="fas fa-cloud"></i>
+      <span>Open Azure VD</span>
+    </div>
     <div class="context-item" onclick="openApp('terminal'); closeContextMenu()">
       <i class="fas fa-terminal"></i>
       <span>Open Terminal</span>
-    </div>
-    <div class="context-item" onclick="openApp('file-manager'); closeContextMenu()">
-      <i class="fas fa-folder"></i>
-      <span>Open Files</span>
     </div>
     <div class="context-item" onclick="openApp('settings'); closeContextMenu()">
       <i class="fas fa-cog"></i>
@@ -457,8 +454,7 @@ function closeContextMenu() {
   document.getElementById('contextMenu')?.classList.add('hidden');
 }
 
-// ==================== NOTIFICATIONS ====================
-
+// Notifications
 function showNotification(title, body = '') {
   const container = document.getElementById('notificationContainer');
   
@@ -474,19 +470,20 @@ function showNotification(title, body = '') {
   setTimeout(() => {
     notif.style.opacity = '0';
     notif.style.transform = 'translateX(100%)';
+    notif.style.transition = 'all 0.3s ease';
     setTimeout(() => notif.remove(), 300);
-  }, 3000);
+  }, 4000);
 }
 
-// ==================== PWA ====================
-
+// PWA
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(err => {
     console.log('SW registration failed:', err);
   });
 }
 
-// Export for global access
+// Global exports
 window.openApp = openApp;
 window.logout = logout;
 window.lockScreen = lockScreen;
+window.closeCloudPanel = closeCloudPanel;

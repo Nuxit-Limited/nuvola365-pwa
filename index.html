@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#1e1e2e">
-  <title>Nuvola OS - Web Desktop</title>
+  <title>Nuvola365 - Cloud Desktop OS</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -18,38 +18,50 @@
   <div id="bootScreen" class="boot-screen">
     <div class="boot-logo">
       <div class="boot-icon">
-        <i class="fas fa-terminal"></i>
+        <i class="fas fa-cloud"></i>
       </div>
-      <h1>Nuvola OS</h1>
-      <div class="boot-version">v1.0.0 - Web Edition</div>
+      <h1>Nuvola365</h1>
+      <div class="boot-version">v1.0.0 - Cloud Desktop Edition</div>
+      <div class="boot-tagline">Azure Virtual Desktop & Windows 365</div>
     </div>
     <div class="boot-progress">
       <div class="boot-bar"></div>
     </div>
-    <div class="boot-text">Initializing system...</div>
+    <div class="boot-text">Connecting to Microsoft cloud...</div>
   </div>
 
   <!-- Login Screen -->
   <div id="loginScreen" class="login-screen hidden">
     <div class="login-container">
       <div class="login-logo">
-        <i class="fas fa-terminal"></i>
+        <i class="fas fa-cloud"></i>
       </div>
-      <h1>Nuvola OS</h1>
+      <h1>Nuvola365</h1>
+      <p class="login-subtitle">Cloud Desktop Operating System</p>
       <div class="login-form">
         <div class="login-user">
           <div class="user-avatar">
             <i class="fas fa-user"></i>
           </div>
-          <div class="user-name">guest</div>
+          <div class="user-info">
+            <div class="user-name">Cloud User</div>
+            <div class="user-email">user@company.com</div>
+          </div>
         </div>
-        <input type="password" id="loginPassword" class="login-input" placeholder="Enter password (or press Enter)" />
         <button id="loginBtn" class="login-btn">
-          <i class="fas fa-arrow-right"></i>
-          Sign In
+          <i class="fab fa-microsoft"></i>
+          <span>Sign in with Microsoft</span>
         </button>
+        <div class="login-providers">
+          <button class="provider-btn" title="Azure AD">
+            <i class="fab fa-microsoft"></i>
+          </button>
+          <button class="provider-btn" title="Work Account">
+            <i class="fas fa-building"></i>
+          </button>
+        </div>
       </div>
-      <div class="login-hint">Hint: Just press Enter or click Sign In</div>
+      <div class="login-hint">Connect to your Windows 365 Cloud PC or Azure Virtual Desktop</div>
     </div>
   </div>
 
@@ -61,11 +73,17 @@
 
     <!-- Desktop Icons -->
     <div class="desktop-icons" id="desktopIcons">
-      <div class="desktop-icon" data-app="file-manager">
+      <div class="desktop-icon" data-app="cloud-pc">
         <div class="icon-wrapper">
-          <i class="fas fa-folder"></i>
+          <i class="fas fa-desktop"></i>
         </div>
-        <span>Files</span>
+        <span>Windows 365</span>
+      </div>
+      <div class="desktop-icon" data-app="avd">
+        <div class="icon-wrapper">
+          <i class="fas fa-cloud"></i>
+        </div>
+        <span>Azure Virtual Desktop</span>
       </div>
       <div class="desktop-icon" data-app="terminal">
         <div class="icon-wrapper">
@@ -73,17 +91,11 @@
         </div>
         <span>Terminal</span>
       </div>
-      <div class="desktop-icon" data-app="text-editor">
+      <div class="desktop-icon" data-app="file-manager">
         <div class="icon-wrapper">
-          <i class="fas fa-file-alt"></i>
+          <i class="fas fa-folder"></i>
         </div>
-        <span>Text Editor</span>
-      </div>
-      <div class="desktop-icon" data-app="browser">
-        <div class="icon-wrapper">
-          <i class="fas fa-globe"></i>
-        </div>
-        <span>Browser</span>
+        <span>Files</span>
       </div>
     </div>
 
@@ -94,26 +106,27 @@
     <div class="top-bar">
       <div class="top-bar-left">
         <button class="top-bar-btn activities-btn" id="activitiesBtn">
-          Activities
+          <i class="fas fa-th"></i>
+          <span>Apps</span>
         </button>
         <div class="top-bar-apps" id="topBarApps"></div>
       </div>
       <div class="top-bar-center">
+        <div class="cloud-status" id="cloudStatus">
+          <i class="fas fa-cloud"></i>
+          <span>Connected to Microsoft Cloud</span>
+        </div>
+      </div>
+      <div class="top-bar-right">
         <div class="top-bar-clock" id="topBarClock">
           <span class="clock-date">Mon Jan 1</span>
           <span class="clock-time">12:00</span>
         </div>
-      </div>
-      <div class="top-bar-right">
         <button class="top-bar-icon" id="networkBtn" title="Network">
           <i class="fas fa-wifi"></i>
         </button>
-        <button class="top-bar-icon" id="volumeBtn" title="Volume">
-          <i class="fas fa-volume-up"></i>
-        </button>
-        <button class="top-bar-icon" id="batteryBtn" title="Battery">
-          <i class="fas fa-battery-three-quarters"></i>
-          <span class="battery-percent">75%</span>
+        <button class="top-bar-icon" id="cloudConnBtn" title="Cloud Connection">
+          <i class="fas fa-cloud-upload-alt"></i>
         </button>
         <button class="top-bar-icon user-btn" id="userMenuBtn">
           <i class="fas fa-user-circle"></i>
@@ -124,24 +137,47 @@
     <!-- Bottom Dock -->
     <div class="dock" id="dock">
       <div class="dock-apps" id="dockApps">
-        <button class="dock-app" data-app="file-manager" title="Files">
-          <i class="fas fa-folder"></i>
+        <!-- Cloud Workspaces -->
+        <button class="dock-app featured" data-app="cloud-pc" title="Windows 365 Cloud PC">
+          <i class="fas fa-desktop"></i>
+          <span class="dock-label">Cloud PC</span>
         </button>
+        <button class="dock-app featured" data-app="avd" title="Azure Virtual Desktop">
+          <i class="fas fa-cloud"></i>
+          <span class="dock-label">AVD</span>
+        </button>
+        <div class="dock-separator"></div>
+        
+        <!-- Microsoft 365 Apps -->
+        <button class="dock-app" data-app="word" title="Word Online">
+          <i class="fas fa-file-word"></i>
+        </button>
+        <button class="dock-app" data-app="excel" title="Excel Online">
+          <i class="fas fa-file-excel"></i>
+        </button>
+        <button class="dock-app" data-app="powerpoint" title="PowerPoint Online">
+          <i class="fas fa-file-powerpoint"></i>
+        </button>
+        <button class="dock-app" data-app="teams" title="Microsoft Teams">
+          <i class="fas fa-users"></i>
+        </button>
+        <button class="dock-app" data-app="outlook" title="Outlook">
+          <i class="fas fa-envelope"></i>
+        </button>
+        <button class="dock-app" data-app="onedrive" title="OneDrive">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </button>
+        <div class="dock-separator"></div>
+        
+        <!-- System Apps -->
         <button class="dock-app" data-app="terminal" title="Terminal">
           <i class="fas fa-terminal"></i>
         </button>
-        <button class="dock-app" data-app="text-editor" title="Text Editor">
-          <i class="fas fa-file-alt"></i>
-        </button>
-        <button class="dock-app" data-app="browser" title="Browser">
-          <i class="fas fa-globe"></i>
+        <button class="dock-app" data-app="file-manager" title="Files">
+          <i class="fas fa-folder"></i>
         </button>
         <button class="dock-app" data-app="settings" title="Settings">
           <i class="fas fa-cog"></i>
-        </button>
-        <div class="dock-separator"></div>
-        <button class="dock-app show-desktop" id="showDesktop" title="Show Desktop">
-          <i class="fas fa-desktop"></i>
         </button>
       </div>
     </div>
@@ -149,59 +185,98 @@
     <!-- Activities Overview -->
     <div class="activities-overview hidden" id="activitiesOverview">
       <div class="activities-header">
-        <input type="text" class="activities-search" id="activitiesSearch" placeholder="Type to search..." />
+        <h2>Cloud Workspaces & Applications</h2>
+        <button class="activities-close" id="activitiesClose">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-      <div class="activities-windows" id="activitiesWindows"></div>
-      <div class="activities-apps">
-        <h3>Applications</h3>
-        <div class="app-grid" id="appGrid">
-          <div class="app-tile" data-app="file-manager">
-            <i class="fas fa-folder"></i>
-            <span>Files</span>
+      
+      <div class="activities-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="activitiesSearch" placeholder="Search apps, cloud resources..." />
+      </div>
+
+      <div class="activities-sections">
+        <!-- Cloud Workspaces -->
+        <div class="app-section">
+          <h3><i class="fas fa-cloud"></i> Cloud Workspaces</h3>
+          <div class="app-grid">
+            <div class="app-tile featured" data-app="cloud-pc">
+              <div class="app-icon">
+                <i class="fas fa-desktop"></i>
+              </div>
+              <span>Windows 365</span>
+              <span class="app-desc">Cloud PC</span>
+            </div>
+            <div class="app-tile featured" data-app="avd">
+              <div class="app-icon">
+                <i class="fas fa-cloud"></i>
+              </div>
+              <span>Azure Virtual Desktop</span>
+              <span class="app-desc">Remote Apps</span>
+            </div>
           </div>
-          <div class="app-tile" data-app="terminal">
-            <i class="fas fa-terminal"></i>
-            <span>Terminal</span>
+        </div>
+
+        <!-- Microsoft 365 -->
+        <div class="app-section">
+          <h3><i class="fab fa-microsoft"></i> Microsoft 365</h3>
+          <div class="app-grid">
+            <div class="app-tile" data-app="word">
+              <div class="app-icon"><i class="fas fa-file-word"></i></div>
+              <span>Word</span>
+            </div>
+            <div class="app-tile" data-app="excel">
+              <div class="app-icon"><i class="fas fa-file-excel"></i></div>
+              <span>Excel</span>
+            </div>
+            <div class="app-tile" data-app="powerpoint">
+              <div class="app-icon"><i class="fas fa-file-powerpoint"></i></div>
+              <span>PowerPoint</span>
+            </div>
+            <div class="app-tile" data-app="teams">
+              <div class="app-icon"><i class="fas fa-users"></i></div>
+              <span>Teams</span>
+            </div>
+            <div class="app-tile" data-app="outlook">
+              <div class="app-icon"><i class="fas fa-envelope"></i></div>
+              <span>Outlook</span>
+            </div>
+            <div class="app-tile" data-app="onedrive">
+              <div class="app-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+              <span>OneDrive</span>
+            </div>
+            <div class="app-tile" data-app="onenote">
+              <div class="app-icon"><i class="fas fa-book"></i></div>
+              <span>OneNote</span>
+            </div>
+            <div class="app-tile" data-app="sharepoint">
+              <div class="app-icon"><i class="fas fa-share-alt"></i></div>
+              <span>SharePoint</span>
+            </div>
           </div>
-          <div class="app-tile" data-app="text-editor">
-            <i class="fas fa-file-alt"></i>
-            <span>Text Editor</span>
-          </div>
-          <div class="app-tile" data-app="browser">
-            <i class="fas fa-globe"></i>
-            <span>Browser</span>
-          </div>
-          <div class="app-tile" data-app="calculator">
-            <i class="fas fa-calculator"></i>
-            <span>Calculator</span>
-          </div>
-          <div class="app-tile" data-app="settings">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-          </div>
-          <div class="app-tile" data-app="image-viewer">
-            <i class="fas fa-image"></i>
-            <span>Image Viewer</span>
-          </div>
-          <div class="app-tile" data-app="music-player">
-            <i class="fas fa-music"></i>
-            <span>Music</span>
-          </div>
-          <div class="app-tile" data-app="cloud-pc">
-            <i class="fas fa-desktop"></i>
-            <span>Cloud PC</span>
-          </div>
-          <div class="app-tile" data-app="word">
-            <i class="fas fa-file-word"></i>
-            <span>Word</span>
-          </div>
-          <div class="app-tile" data-app="excel">
-            <i class="fas fa-file-excel"></i>
-            <span>Excel</span>
-          </div>
-          <div class="app-tile" data-app="teams">
-            <i class="fas fa-users"></i>
-            <span>Teams</span>
+        </div>
+
+        <!-- System Tools -->
+        <div class="app-section">
+          <h3><i class="fas fa-tools"></i> System Tools</h3>
+          <div class="app-grid">
+            <div class="app-tile" data-app="terminal">
+              <div class="app-icon"><i class="fas fa-terminal"></i></div>
+              <span>Terminal</span>
+            </div>
+            <div class="app-tile" data-app="file-manager">
+              <div class="app-icon"><i class="fas fa-folder"></i></div>
+              <span>Files</span>
+            </div>
+            <div class="app-tile" data-app="text-editor">
+              <div class="app-icon"><i class="fas fa-file-alt"></i></div>
+              <span>Text Editor</span>
+            </div>
+            <div class="app-tile" data-app="settings">
+              <div class="app-icon"><i class="fas fa-cog"></i></div>
+              <span>Settings</span>
+            </div>
           </div>
         </div>
       </div>
@@ -213,32 +288,88 @@
         <div class="user-avatar-small">
           <i class="fas fa-user"></i>
         </div>
-        <div class="user-info">
-          <div class="user-name-small">guest</div>
-          <div class="user-status">Available</div>
+        <div class="user-info-small">
+          <div class="user-name-small">Cloud User</div>
+          <div class="user-email-small">user@company.com</div>
+          <div class="user-status">Connected to Azure</div>
         </div>
       </div>
       <div class="system-menu-divider"></div>
+      <button class="system-menu-item" onclick="openApp('cloud-pc')">
+        <i class="fas fa-desktop"></i>
+        <span>Open Cloud PC</span>
+      </button>
       <button class="system-menu-item" onclick="openApp('settings')">
         <i class="fas fa-cog"></i>
         <span>Settings</span>
       </button>
+      <div class="system-menu-divider"></div>
       <button class="system-menu-item" onclick="lockScreen()">
         <i class="fas fa-lock"></i>
         <span>Lock Screen</span>
       </button>
-      <div class="system-menu-divider"></div>
       <button class="system-menu-item" onclick="logout()">
         <i class="fas fa-power-off"></i>
-        <span>Log Out</span>
+        <span>Sign Out</span>
       </button>
     </div>
 
     <!-- Context Menu -->
     <div class="context-menu hidden" id="contextMenu"></div>
 
-    <!-- Notification -->
+    <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Cloud Connection Panel -->
+    <div class="cloud-panel hidden" id="cloudPanel">
+      <div class="cloud-panel-header">
+        <h3>Cloud Connections</h3>
+        <button class="cloud-panel-close" onclick="closeCloudPanel()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="cloud-panel-content">
+        <div class="cloud-connection">
+          <div class="connection-icon">
+            <i class="fas fa-desktop"></i>
+          </div>
+          <div class="connection-info">
+            <h4>Windows 365 Cloud PC</h4>
+            <p>Premium Performance</p>
+            <div class="connection-status online">
+              <i class="fas fa-circle"></i> Online
+            </div>
+          </div>
+          <button class="connection-btn" onclick="openApp('cloud-pc')">Connect</button>
+        </div>
+        <div class="cloud-connection">
+          <div class="connection-icon">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <div class="connection-info">
+            <h4>Azure Virtual Desktop</h4>
+            <p>Remote Applications</p>
+            <div class="connection-status online">
+              <i class="fas fa-circle"></i> Online
+            </div>
+          </div>
+          <button class="connection-btn" onclick="openApp('avd')">Connect</button>
+        </div>
+        <div class="cloud-connection">
+          <div class="connection-icon">
+            <i class="fas fa-cloud-upload-alt"></i>
+          </div>
+          <div class="connection-info">
+            <h4>OneDrive Storage</h4>
+            <p>1TB Available</p>
+            <div class="connection-status online">
+              <i class="fas fa-circle"></i> Synced
+            </div>
+          </div>
+          <button class="connection-btn" onclick="openApp('onedrive')">Open</button>
+        </div>
+      </div>
+    </div>
 
   </div>
 

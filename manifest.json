@@ -1,23 +1,23 @@
 {
-  "name": "Nuvola OS",
-  "short_name": "NuvolaOS",
-  "description": "ProZilla-inspired web desktop environment",
+  "name": "Nuvola365 - Cloud Desktop",
+  "short_name": "Nuvola365",
+  "description": "ProZilla-inspired web OS for Azure Virtual Desktop & Windows 365",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#1e1e2e",
-  "theme_color": "#89b4fa",
-  "categories": ["productivity", "utilities"],
+  "theme_color": "#0078d4",
+  "categories": ["productivity", "business", "utilities"],
   "icons": [
     {
-      "src": "https://via.placeholder.com/192/89b4fa/1e1e2e?text=OS",
+      "src": "https://via.placeholder.com/192/0078d4/ffffff?text=365",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://via.placeholder.com/512/89b4fa/1e1e2e?text=OS",
+      "src": "https://via.placeholder.com/512/0078d4/ffffff?text=365",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -25,18 +25,25 @@
   ],
   "shortcuts": [
     {
+      "name": "Windows 365",
+      "short_name": "Cloud PC",
+      "description": "Open Windows 365 Cloud PC",
+      "url": "/?app=cloud-pc",
+      "icons": [{ "src": "https://via.placeholder.com/192/0078d4/ffffff?text=PC", "sizes": "192x192" }]
+    },
+    {
+      "name": "Azure Virtual Desktop",
+      "short_name": "AVD",
+      "description": "Open Azure Virtual Desktop",
+      "url": "/?app=avd",
+      "icons": [{ "src": "https://via.placeholder.com/192/0078d4/ffffff?text=AVD", "sizes": "192x192" }]
+    },
+    {
       "name": "Terminal",
       "short_name": "Terminal",
       "description": "Open Terminal",
       "url": "/?app=terminal",
       "icons": [{ "src": "https://via.placeholder.com/192/89b4fa/1e1e2e?text=T", "sizes": "192x192" }]
-    },
-    {
-      "name": "Files",
-      "short_name": "Files",
-      "description": "Open File Manager",
-      "url": "/?app=file-manager",
-      "icons": [{ "src": "https://via.placeholder.com/192/f9e2af/1e1e2e?text=F", "sizes": "192x192" }]
     }
   ]
 }

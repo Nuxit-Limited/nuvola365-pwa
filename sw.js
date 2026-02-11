@@ -1,5 +1,5 @@
-// Nuvola OS Service Worker
-const CACHE_NAME = 'nuvola-os-v1.0.0';
+// Nuvola365 Service Worker
+const CACHE_NAME = 'nuvola365-v1.0.0';
 const ASSETS = [
   '/',
   '/index.html',
@@ -41,7 +41,7 @@ self.addEventListener('fetch', (event) => {
         if (response) return response;
         
         return fetch(event.request).then(response => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+          if (!response || response.status !== 200) {
             return response;
           }
           

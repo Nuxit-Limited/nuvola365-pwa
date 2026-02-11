@@ -1,14 +1,119 @@
 // ============================================
-// NUVOLA OS - Applications
+// NUVOLA365 - Cloud Applications
+// Focus: Azure Virtual Desktop & Windows 365
 // ============================================
 
 const Applications = {
   
+  // ==================== WINDOWS 365 CLOUD PC ====================
+  'cloud-pc': {
+    name: 'Windows 365',
+    icon: 'fas fa-desktop',
+    color: '#0078d4',
+    description: 'Your Cloud PC powered by Windows 365',
+    isCloudApp: true,
+    url: 'https://windows365.microsoft.com',
+    openInTab: true
+  },
+
+  // ==================== AZURE VIRTUAL DESKTOP ====================
+  'avd': {
+    name: 'Azure Virtual Desktop',
+    icon: 'fas fa-cloud',
+    color: '#0078d4',
+    description: 'Remote apps and desktops',
+    isCloudApp: true,
+    url: 'https://client.wvd.microsoft.com/arm/webclient/',
+    openInTab: true
+  },
+
+  // ==================== MICROSOFT 365 APPS ====================
+  'word': {
+    name: 'Word',
+    icon: 'fas fa-file-word',
+    color: '#2b579a',
+    description: 'Microsoft Word Online',
+    isCloudApp: true,
+    url: 'https://www.office.com/launch/word',
+    openInTab: true
+  },
+
+  'excel': {
+    name: 'Excel',
+    icon: 'fas fa-file-excel',
+    color: '#217346',
+    description: 'Microsoft Excel Online',
+    isCloudApp: true,
+    url: 'https://www.office.com/launch/excel',
+    openInTab: true
+  },
+
+  'powerpoint': {
+    name: 'PowerPoint',
+    icon: 'fas fa-file-powerpoint',
+    color: '#d24726',
+    description: 'Microsoft PowerPoint Online',
+    isCloudApp: true,
+    url: 'https://www.office.com/launch/powerpoint',
+    openInTab: true
+  },
+
+  'teams': {
+    name: 'Teams',
+    icon: 'fas fa-users',
+    color: '#6264a7',
+    description: 'Microsoft Teams',
+    isCloudApp: true,
+    url: 'https://teams.microsoft.com',
+    openInTab: true
+  },
+
+  'outlook': {
+    name: 'Outlook',
+    icon: 'fas fa-envelope',
+    color: '#0078d4',
+    description: 'Outlook Mail',
+    isCloudApp: true,
+    url: 'https://outlook.office.com',
+    openInTab: true
+  },
+
+  'onedrive': {
+    name: 'OneDrive',
+    icon: 'fas fa-cloud-upload-alt',
+    color: '#0078d4',
+    description: 'OneDrive Storage',
+    isCloudApp: true,
+    url: 'https://onedrive.live.com',
+    openInTab: true
+  },
+
+  'onenote': {
+    name: 'OneNote',
+    icon: 'fas fa-book',
+    color: '#80397b',
+    description: 'Microsoft OneNote',
+    isCloudApp: true,
+    url: 'https://www.onenote.com/notebooks',
+    openInTab: true
+  },
+
+  'sharepoint': {
+    name: 'SharePoint',
+    icon: 'fas fa-share-alt',
+    color: '#036c70',
+    description: 'SharePoint Sites',
+    isCloudApp: true,
+    url: 'https://www.office.com/launch/sharepoint',
+    openInTab: true
+  },
+
   // ==================== TERMINAL ====================
   'terminal': {
     name: 'Terminal',
     icon: 'fas fa-terminal',
     color: '#89b4fa',
+    description: 'Command line interface',
     render: (container, windowId) => {
       const historyKey = `terminal_history_${windowId}`;
       const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
@@ -19,7 +124,7 @@ const Applications = {
             ${history.map(line => `<div class="terminal-line">${line}</div>`).join('')}
           </div>
           <div class="terminal-input-line">
-            <span class="terminal-prompt">guest@nuvola:${fs.currentPath}$</span>
+            <span class="terminal-prompt">cloud@nuvola365:${fs.currentPath}$</span>
             <input type="text" class="terminal-input" id="terminal-input-${windowId}" autofocus />
           </div>
         </div>
@@ -27,7 +132,7 @@ const Applications = {
           .terminal {
             height: 100%;
             background: var(--crust);
-            padding: 16px;
+            padding: 20px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
             color: var(--text);
@@ -37,7 +142,7 @@ const Applications = {
           .terminal-output {
             flex: 1;
             overflow-y: auto;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
           }
           .terminal-line {
             margin-bottom: 4px;
@@ -47,11 +152,12 @@ const Applications = {
           .terminal-input-line {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
           }
           .terminal-prompt {
-            color: var(--green);
+            color: var(--cloud-blue);
             flex-shrink: 0;
+            font-weight: 600;
           }
           .terminal-input {
             flex: 1;
@@ -63,10 +169,13 @@ const Applications = {
             font-size: inherit;
           }
           .terminal-error {
-            color: var(--red);
+            color: var(--error);
           }
           .terminal-success {
-            color: var(--green);
+            color: var(--success);
+          }
+          .terminal-info {
+            color: var(--cloud-blue);
           }
         </style>
       `;
@@ -88,7 +197,7 @@ const Applications = {
       };
       
       const executeCommand = (cmd) => {
-        addOutput(`guest@nuvola:${fs.currentPath}$ ${cmd}`);
+        addOutput(`cloud@nuvola365:${fs.currentPath}$ ${cmd}`);
         commandHistory.push(cmd);
         historyIndex = commandHistory.length;
         
@@ -98,6 +207,31 @@ const Applications = {
         
         try {
           switch (command) {
+            case 'cloud-connect':
+              addOutput('Connecting to Azure Cloud...', 'terminal-info');
+              addOutput('✓ Connected to Windows 365', 'terminal-success');
+              addOutput('✓ Connected to Azure Virtual Desktop', 'terminal-success');
+              addOutput('✓ OneDrive synced', 'terminal-success');
+              break;
+              
+            case 'cloud-status':
+              addOutput('Cloud Connection Status:', 'terminal-info');
+              addOutput('  Windows 365: Online ✓', 'terminal-success');
+              addOutput('  Azure VD: Online ✓', 'terminal-success');
+              addOutput('  OneDrive: Synced ✓', 'terminal-success');
+              addOutput('  Network: Connected', 'terminal-success');
+              break;
+              
+            case 'launch':
+              if (!args[0]) {
+                addOutput('Usage: launch <app>', 'terminal-error');
+                addOutput('Available: cloud-pc, avd, word, excel, teams');
+              } else {
+                addOutput(`Launching ${args[0]}...`, 'terminal-info');
+                setTimeout(() => openApp(args[0]), 500);
+              }
+              break;
+              
             case 'ls':
               const files = fs.listDirectory(args[0] || fs.currentPath);
               if (files.length === 0) {
@@ -111,8 +245,7 @@ const Applications = {
               break;
               
             case 'cd':
-              const newPath = args[0] || '/home/guest';
-              fs.changeDirectory(newPath);
+              fs.changeDirectory(args[0] || '/home/guest');
               updatePrompt();
               break;
               
@@ -134,7 +267,7 @@ const Applications = {
                 addOutput('Usage: mkdir <directory>', 'terminal-error');
               } else {
                 fs.createDirectory(args[0]);
-                addOutput(`Created directory: ${args[0]}`, 'terminal-success');
+                addOutput(`Created: ${args[0]}`, 'terminal-success');
               }
               break;
               
@@ -143,7 +276,7 @@ const Applications = {
                 addOutput('Usage: touch <file>', 'terminal-error');
               } else {
                 fs.writeFile(args[0], '');
-                addOutput(`Created file: ${args[0]}`, 'terminal-success');
+                addOutput(`Created: ${args[0]}`, 'terminal-success');
               }
               break;
               
@@ -153,15 +286,6 @@ const Applications = {
               } else {
                 fs.deleteFile(args[0]);
                 addOutput(`Deleted: ${args[0]}`, 'terminal-success');
-              }
-              break;
-              
-            case 'rmdir':
-              if (!args[0]) {
-                addOutput('Usage: rmdir <directory>', 'terminal-error');
-              } else {
-                fs.deleteDirectory(args[0]);
-                addOutput(`Deleted directory: ${args[0]}`, 'terminal-success');
               }
               break;
               
@@ -176,29 +300,26 @@ const Applications = {
               break;
               
             case 'help':
-              addOutput('Available commands:');
+              addOutput('Nuvola365 Terminal Commands:', 'terminal-info');
+              addOutput('');
+              addOutput('Cloud Commands:');
+              addOutput('  cloud-connect   - Connect to Azure cloud services');
+              addOutput('  cloud-status    - Show cloud connection status');
+              addOutput('  launch <app>    - Launch cloud application');
+              addOutput('');
+              addOutput('File System:');
               addOutput('  ls [path]       - List directory contents');
               addOutput('  cd <path>       - Change directory');
               addOutput('  pwd             - Print working directory');
               addOutput('  cat <file>      - Display file contents');
               addOutput('  mkdir <dir>     - Create directory');
-              addOutput('  touch <file>    - Create empty file');
+              addOutput('  touch <file>    - Create file');
               addOutput('  rm <file>       - Remove file');
-              addOutput('  rmdir <dir>     - Remove empty directory');
+              addOutput('');
+              addOutput('System:');
               addOutput('  echo <text>     - Print text');
               addOutput('  clear           - Clear screen');
-              addOutput('  neofetch        - System information');
               addOutput('  help            - Show this help');
-              break;
-              
-            case 'neofetch':
-              addOutput('         ___');
-              addOutput('        (.. |        guest@nuvola');
-              addOutput('        (<> |        -------------');
-              addOutput('       / __  \\       OS: Nuvola OS 1.0.0');
-              addOutput('      ( /  \\ /|      Shell: NuvolaShell');
-              addOutput('     _/\\ __)/_)      Terminal: Web Terminal');
-              addOutput('     \\/-____\\/       CPU: JavaScript Engine');
               break;
               
             case '':
@@ -215,7 +336,7 @@ const Applications = {
       
       const updatePrompt = () => {
         container.querySelector('.terminal-prompt').textContent = 
-          `guest@nuvola:${fs.currentPath}$`;
+          `cloud@nuvola365:${fs.currentPath}$`;
       };
       
       input.addEventListener('keydown', (e) => {
@@ -243,7 +364,9 @@ const Applications = {
         }
       });
       
-      addOutput('Nuvola OS Terminal - Type "help" for commands');
+      addOutput('Nuvola365 Cloud Terminal');
+      addOutput('Type "help" for commands, "cloud-status" for connection info');
+      addOutput('');
       input.focus();
     }
   },
@@ -253,6 +376,7 @@ const Applications = {
     name: 'Files',
     icon: 'fas fa-folder',
     color: '#f9e2af',
+    description: 'File manager',
     render: (container, windowId) => {
       let currentPath = '/home/guest';
       
@@ -266,9 +390,6 @@ const Applications = {
               <button class="fm-btn" onclick="Applications['file-manager'].goBack('${windowId}')">
                 <i class="fas fa-arrow-left"></i>
               </button>
-              <button class="fm-btn" onclick="Applications['file-manager'].goUp('${windowId}')">
-                <i class="fas fa-arrow-up"></i>
-              </button>
               <div class="fm-path">
                 <i class="fas fa-home"></i>
                 ${pathParts.map((p, i) => 
@@ -281,9 +402,6 @@ const Applications = {
               <button class="fm-btn" onclick="Applications['file-manager'].newFolder('${windowId}')">
                 <i class="fas fa-folder-plus"></i>
               </button>
-              <button class="fm-btn" onclick="Applications['file-manager'].newFile('${windowId}')">
-                <i class="fas fa-file-plus"></i>
-              </button>
             </div>
             <div class="fm-content">
               ${files.length === 0 ? '<div class="fm-empty">Empty directory</div>' : ''}
@@ -293,7 +411,6 @@ const Applications = {
                     <i class="fas fa-${f.type === 'directory' ? 'folder' : 'file-alt'}"></i>
                   </div>
                   <div class="fm-item-name">${f.name}</div>
-                  <div class="fm-item-size">${f.type === 'file' ? f.size + ' B' : ''}</div>
                 </div>
               `).join('')}
             </div>
@@ -308,20 +425,23 @@ const Applications = {
             .fm-toolbar {
               display: flex;
               align-items: center;
-              gap: 8px;
-              padding: 12px;
+              gap: 10px;
+              padding: 16px;
               background: var(--mantle);
               border-bottom: 1px solid var(--surface0);
             }
             .fm-btn {
-              width: 36px;
-              height: 36px;
+              width: 40px;
+              height: 40px;
               border: none;
               background: var(--surface0);
               color: var(--text);
-              border-radius: 8px;
+              border-radius: var(--border-radius-sm);
               cursor: pointer;
-              transition: all 0.2s;
+              transition: all var(--transition);
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
             .fm-btn:hover {
               background: var(--surface1);
@@ -330,8 +450,8 @@ const Applications = {
               flex: 1;
               display: flex;
               align-items: center;
-              gap: 4px;
-              padding: 0 12px;
+              gap: 6px;
+              padding: 0 16px;
               font-family: 'JetBrains Mono', monospace;
               font-size: 0.875rem;
               color: var(--subtext1);
@@ -342,46 +462,43 @@ const Applications = {
             .fm-content {
               flex: 1;
               overflow-y: auto;
-              padding: 16px;
+              padding: 20px;
               display: grid;
-              grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-              gap: 16px;
+              grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+              gap: 20px;
               align-content: start;
             }
             .fm-empty {
               grid-column: 1 / -1;
               text-align: center;
-              padding: 40px;
+              padding: 60px 20px;
               color: var(--overlay1);
             }
             .fm-item {
               display: flex;
               flex-direction: column;
               align-items: center;
-              gap: 8px;
-              padding: 12px;
-              border-radius: 8px;
+              gap: 10px;
+              padding: 16px;
+              border-radius: var(--border-radius);
               cursor: pointer;
-              transition: all 0.2s;
+              transition: all var(--transition);
             }
             .fm-item:hover {
               background: var(--surface0);
             }
             .fm-item-icon {
-              font-size: 48px;
+              font-size: 56px;
               color: var(--accent);
             }
             .fm-item-icon .fa-folder {
-              color: var(--yellow);
+              color: var(--warning);
             }
             .fm-item-name {
               font-size: 0.875rem;
               text-align: center;
               word-break: break-word;
-            }
-            .fm-item-size {
-              font-size: 0.75rem;
-              color: var(--overlay1);
+              font-weight: 500;
             }
           </style>
         `;
@@ -395,52 +512,30 @@ const Applications = {
               currentPath = path;
               render();
             } else {
-              // Open file in text editor
               openApp('text-editor', { file: path });
             }
           });
         });
       };
       
-      // Store methods for toolbar buttons
-      Applications['file-manager'].goBack = (id) => {
+      Applications['file-manager'].goBack = () => {
         if (currentPath !== '/') {
           currentPath = fs.getParentPath(currentPath);
           render();
         }
       };
       
-      Applications['file-manager'].goUp = (id) => {
-        if (currentPath !== '/') {
-          currentPath = fs.getParentPath(currentPath);
-          render();
-        }
-      };
-      
-      Applications['file-manager'].refresh = (id) => {
+      Applications['file-manager'].refresh = () => {
         render();
       };
       
-      Applications['file-manager'].newFolder = (id) => {
+      Applications['file-manager'].newFolder = () => {
         const name = prompt('Folder name:');
         if (name) {
           try {
             fs.createDirectory(`${currentPath}/${name}`);
             render();
             showNotification('Folder created', name);
-          } catch (e) {
-            showNotification('Error', e.message);
-          }
-        }
-      };
-      
-      Applications['file-manager'].newFile = (id) => {
-        const name = prompt('File name:');
-        if (name) {
-          try {
-            fs.writeFile(`${currentPath}/${name}`, '');
-            render();
-            showNotification('File created', name);
           } catch (e) {
             showNotification('Error', e.message);
           }
@@ -456,6 +551,7 @@ const Applications = {
     name: 'Text Editor',
     icon: 'fas fa-file-alt',
     color: '#a6e3a1',
+    description: 'Edit text files',
     render: (container, windowId, options = {}) => {
       let currentFile = options.file || null;
       let content = currentFile ? fs.readFile(currentFile) : '';
@@ -463,12 +559,6 @@ const Applications = {
       container.innerHTML = `
         <div class="text-editor">
           <div class="te-toolbar">
-            <button class="te-btn" onclick="Applications['text-editor'].newFile('${windowId}')">
-              <i class="fas fa-file"></i> New
-            </button>
-            <button class="te-btn" onclick="Applications['text-editor'].open('${windowId}')">
-              <i class="fas fa-folder-open"></i> Open
-            </button>
             <button class="te-btn" onclick="Applications['text-editor'].save('${windowId}')">
               <i class="fas fa-save"></i> Save
             </button>
@@ -485,77 +575,55 @@ const Applications = {
           .te-toolbar {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px;
+            gap: 12px;
+            padding: 16px;
             background: var(--mantle);
             border-bottom: 1px solid var(--surface0);
           }
           .te-btn {
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
-            background: var(--surface0);
-            color: var(--text);
-            border-radius: 8px;
+            background: var(--accent);
+            color: white;
+            border-radius: var(--border-radius-sm);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all var(--transition);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 0.875rem;
+            font-weight: 600;
           }
           .te-btn:hover {
-            background: var(--surface1);
+            background: var(--accent-hover);
           }
           .te-filename {
             flex: 1;
-            padding: 0 12px;
+            padding: 0 16px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.875rem;
             color: var(--subtext1);
           }
           .te-content {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             background: var(--base);
             border: none;
             outline: none;
             color: var(--text);
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
             resize: none;
           }
         </style>
       `;
       
-      Applications['text-editor'].newFile = (id) => {
-        if (confirm('Create new file? Unsaved changes will be lost.')) {
-          currentFile = null;
-          container.querySelector('.te-content').value = '';
-          container.querySelector('.te-filename').textContent = 'Untitled';
-        }
-      };
-      
-      Applications['text-editor'].open = (id) => {
-        const path = prompt('File path:', '/home/guest/Documents/welcome.txt');
-        if (path) {
-          try {
-            content = fs.readFile(path);
-            currentFile = path;
-            container.querySelector('.te-content').value = content;
-            container.querySelector('.te-filename').textContent = currentFile;
-            showNotification('File opened', fs.getBasename(path));
-          } catch (e) {
-            showNotification('Error', e.message);
-          }
-        }
-      };
-      
-      Applications['text-editor'].save = (id) => {
+      Applications['text-editor'].save = () => {
         const content = container.querySelector('.te-content').value;
         
         if (!currentFile) {
-          const path = prompt('Save as:', '/home/guest/Documents/untitled.txt');
+          const path = prompt('Save as:', '/home/guest/untitled.txt');
           if (!path) return;
           currentFile = path;
         }
@@ -571,64 +639,90 @@ const Applications = {
     }
   },
 
-  // ==================== BROWSER ====================
-  'browser': {
-    name: 'Browser',
-    icon: 'fas fa-globe',
-    color: '#74c7ec',
+  // ==================== SETTINGS ====================
+  'settings': {
+    name: 'Settings',
+    icon: 'fas fa-cog',
+    color: '#78909c',
+    description: 'System settings',
     render: (container) => {
       container.innerHTML = `
-        <div class="browser">
-          <div class="browser-toolbar">
-            <button class="browser-btn"><i class="fas fa-arrow-left"></i></button>
-            <button class="browser-btn"><i class="fas fa-arrow-right"></i></button>
-            <button class="browser-btn"><i class="fas fa-sync"></i></button>
-            <div class="browser-address">
-              <i class="fas fa-lock"></i>
-              <input type="text" value="https://example.com" placeholder="Enter URL..." />
+        <div class="settings">
+          <div class="settings-content">
+            <h2>Cloud Settings</h2>
+            <div class="setting-group">
+              <h3>Connection</h3>
+              <div class="setting-item">
+                <label>Auto-connect to Windows 365</label>
+                <input type="checkbox" checked />
+              </div>
+              <div class="setting-item">
+                <label>Auto-connect to Azure VD</label>
+                <input type="checkbox" checked />
+              </div>
+            </div>
+            <div class="setting-group">
+              <h3>Appearance</h3>
+              <div class="setting-item">
+                <label>Theme</label>
+                <select>
+                  <option>Dark (Catppuccin)</option>
+                  <option>Light</option>
+                </select>
+              </div>
             </div>
           </div>
-          <iframe src="about:blank" class="browser-frame"></iframe>
         </div>
         <style>
-          .browser { height: 100%; display: flex; flex-direction: column; }
-          .browser-toolbar { display: flex; gap: 8px; padding: 12px; background: var(--mantle); border-bottom: 1px solid var(--surface0); }
-          .browser-btn { width: 36px; height: 36px; border: none; background: var(--surface0); color: var(--text); border-radius: 8px; cursor: pointer; }
-          .browser-address { flex: 1; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: var(--surface0); border-radius: 8px; }
-          .browser-address input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); }
-          .browser-frame { flex: 1; border: none; background: white; }
+          .settings {
+            height: 100%;
+            overflow-y: auto;
+            background: var(--base);
+          }
+          .settings-content {
+            padding: 32px;
+            max-width: 800px;
+            margin: 0 auto;
+          }
+          .settings-content h2 {
+            font-size: 1.75rem;
+            margin-bottom: 32px;
+          }
+          .setting-group {
+            background: var(--mantle);
+            border: 1px solid var(--surface0);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 20px;
+          }
+          .setting-group h3 {
+            font-size: 1.125rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+          }
+          .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--surface0);
+          }
+          .setting-item:last-child {
+            border-bottom: none;
+          }
+          .setting-item label {
+            font-size: 0.9375rem;
+          }
+          .setting-item select {
+            padding: 8px 12px;
+            background: var(--surface0);
+            border: 1px solid var(--surface1);
+            border-radius: var(--border-radius-sm);
+            color: var(--text);
+            outline: none;
+          }
         </style>
       `;
     }
-  },
-
-  // Cloud Apps (abbreviated for space)
-  'cloud-pc': {
-    name: 'Cloud PC',
-    icon: 'fas fa-desktop',
-    color: '#0078d4',
-    isCloud: true,
-    url: 'https://windows365.microsoft.com'
-  },
-  'word': {
-    name: 'Word',
-    icon: 'fas fa-file-word',
-    color: '#2b579a',
-    isCloud: true,
-    url: 'https://www.office.com/launch/word'
-  },
-  'excel': {
-    name: 'Excel',
-    icon: 'fas fa-file-excel',
-    color: '#217346',
-    isCloud: true,
-    url: 'https://www.office.com/launch/excel'
-  },
-  'teams': {
-    name: 'Teams',
-    icon: 'fas fa-users',
-    color: '#6264a7',
-    isCloud: true,
-    url: 'https://teams.microsoft.com'
   }
 };
