@@ -1,12 +1,11 @@
-// Nuvola365 Service Worker
-const CACHE_NAME = 'nuvola365-v1.0.0';
+const CACHE_NAME = 'nuvola365-dex-v1.0.0';
 const ASSETS = [
   '/',
   '/index.html',
   '/style.css',
-  '/filesystem.js',
   '/apps.js',
   '/system.js',
+  '/filesystem.js',
   '/manifest.json'
 ];
 
@@ -37,20 +36,6 @@ self.addEventListener('fetch', (event) => {
   
   event.respondWith(
     caches.match(event.request)
-      .then(response => {
-        if (response) return response;
-        
-        return fetch(event.request).then(response => {
-          if (!response || response.status !== 200) {
-            return response;
-          }
-          
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => cache.put(event.request, responseToCache));
-          
-          return response;
-        });
-      })
+      .then(response => response || fetch(event.request))
   );
 });

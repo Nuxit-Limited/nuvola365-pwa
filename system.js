@@ -1,6 +1,6 @@
 // ============================================
-// NUVOLA365 - System Orchestration
-// Cloud Desktop for AVD & Windows 365
+// NUVOLA365 - Samsung DeX System
+// Complete with Auth & Desktop Icons
 // ============================================
 
 const System = {
@@ -9,151 +9,182 @@ const System = {
   activeWindow: null,
   isDragging: false,
   dragWindow: null,
-  dragOffset: { x: 0, y: 0 },
-  cloudConnected: true
+  dragOffset: { x: 0, y: 0 }
 };
 
-// Boot & Login
+// ============================================
+// BOOT & INITIALIZATION
+// ============================================
+
 document.addEventListener('DOMContentLoaded', () => {
   bootSystem();
 });
 
 function bootSystem() {
+  // Simulate loading
   setTimeout(() => {
-    document.getElementById('bootScreen').classList.add('hidden');
-    document.getElementById('loginScreen').classList.remove('hidden');
-  }, 3500);
+    document.getElementById('loadingScreen').classList.add('hidden');
+    document.getElementById('authScreen').classList.remove('hidden');
+    initializeAuth();
+  }, 3000);
 }
 
-document.getElementById('loginBtn')?.addEventListener('click', login);
-
-function login() {
-  document.getElementById('loginScreen').classList.add('hidden');
-  const desktop = document.getElementById('desktop');
-  desktop.classList.remove('hidden');
-  desktop.style.opacity = '0';
-  setTimeout(() => {
-    desktop.style.transition = 'opacity 0.5s ease';
-    desktop.style.opacity = '1';
-  }, 50);
+function initializeAuth() {
+  // Sign In button
+  document.getElementById('signInBtn').addEventListener('click', () => {
+    handleAuth('signin');
+  });
   
-  setTimeout(() => {
-    showNotification('Connected to Microsoft Cloud', 'Windows 365 and Azure VD ready');
-  }, 1000);
+  // Sign Up button
+  document.getElementById('signUpBtn').addEventListener('click', () => {
+    handleAuth('signup');
+  });
+}
+
+function handleAuth(type) {
+  // Show loading state
+  const authScreen = document.getElementById('authScreen');
+  const btn = type === 'signin' ? document.getElementById('signInBtn') : document.getElementById('signUpBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Authenticating...</span>';
   
-  initializeDesktop();
+  // Simulate authentication (replace with real Microsoft OAuth in production)
+  setTimeout(() => {
+    // Store auth state
+    localStorage.setItem('nuvola365_auth', 'true');
+    localStorage.setItem('nuvola365_auth_type', type);
+    localStorage.setItem('nuvola365_auth_time', new Date().toISOString());
+    
+    // Hide auth screen, show desktop
+    authScreen.classList.add('hidden');
+    document.getElementById('desktop').classList.remove('hidden');
+    
+    // Initialize desktop
+    initializeDesktop();
+    
+    // Welcome message
+    const authType = type === 'signin' ? 'Signed in' : 'Account created';
+    setTimeout(() => {
+      showNotification('Welcome to Nuvola365', `${authType} successfully!`);
+    }, 500);
+  }, 1500);
 }
 
-function logout() {
-  if (confirm('Sign out from Microsoft Cloud?')) {
-    location.reload();
-  }
-}
-
-function lockScreen() {
-  document.getElementById('desktop').classList.add('hidden');
-  document.getElementById('loginScreen').classList.remove('hidden');
-}
-
-// Desktop Initialization
 function initializeDesktop() {
+  // Update clock
   updateClock();
   setInterval(updateClock, 1000);
   
-  // Desktop icons
+  // Desktop Icons - Double click to open
   document.querySelectorAll('.desktop-icon').forEach(icon => {
     icon.addEventListener('dblclick', () => {
-      openApp(icon.dataset.app);
+      const appId = icon.dataset.app;
+      openApp(appId);
     });
   });
   
-  // Dock apps
-  document.querySelectorAll('.dock-app[data-app]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      openApp(btn.dataset.app);
+  // App Menu Button
+  document.getElementById('appMenuBtn').addEventListener('click', toggleAppLauncher);
+  
+  // Launcher Close
+  document.getElementById('launcherClose')?.addEventListener('click', closeAppLauncher);
+  
+  // App Items in Launcher
+  document.querySelectorAll('.app-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const appId = item.dataset.app;
+      openApp(appId);
+      closeAppLauncher();
     });
   });
   
-  // App tiles
-  document.querySelectorAll('.app-tile').forEach(tile => {
-    tile.addEventListener('click', () => {
-      openApp(tile.dataset.app);
-      closeActivitiesOverview();
+  // App Folders
+  document.querySelectorAll('.app-folder').forEach(folder => {
+    folder.addEventListener('click', () => {
+      const folderId = folder.dataset.folder;
+      openFolder(folderId);
     });
   });
   
-  // Activities
-  document.getElementById('activitiesBtn')?.addEventListener('click', toggleActivitiesOverview);
-  document.getElementById('activitiesClose')?.addEventListener('click', closeActivitiesOverview);
+  // Lock/Exit DeX
+  document.getElementById('lockDex')?.addEventListener('click', () => {
+    // Lock screen - just close launcher for now
+    closeAppLauncher();
+    showNotification('Screen Locked', 'Click to unlock');
+  });
   
-  // Menus
-  document.getElementById('userMenuBtn')?.addEventListener('click', toggleSystemMenu);
-  document.getElementById('cloudConnBtn')?.addEventListener('click', toggleCloudPanel);
-  
-  // Close menus on outside click
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('#systemMenu') && !e.target.closest('#userMenuBtn')) {
-      document.getElementById('systemMenu')?.classList.add('hidden');
+  document.getElementById('exitDex')?.addEventListener('click', () => {
+    if (confirm('Sign out and exit DeX mode?')) {
+      // Clear auth state
+      localStorage.removeItem('nuvola365_auth');
+      localStorage.removeItem('nuvola365_auth_type');
+      localStorage.removeItem('nuvola365_auth_time');
+      
+      // Reload to login screen
+      location.reload();
     }
-    if (!e.target.closest('#cloudPanel') && !e.target.closest('#cloudConnBtn')) {
-      document.getElementById('cloudPanel')?.classList.add('hidden');
-    }
+  });
+  
+  // Launcher Search
+  document.getElementById('launcherSearch')?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    document.querySelectorAll('.app-item').forEach(item => {
+      const name = item.querySelector('span').textContent.toLowerCase();
+      item.style.display = name.includes(query) ? 'flex' : 'none';
+    });
   });
   
   // Window management
   document.addEventListener('mousemove', handleDragging);
   document.addEventListener('mouseup', stopDragging);
   
-  // Context menu
-  document.addEventListener('contextmenu', handleContextMenu);
-  document.addEventListener('click', () => {
-    document.getElementById('contextMenu')?.classList.add('hidden');
-  });
-  
-  // Activities search
-  document.getElementById('activitiesSearch')?.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    document.querySelectorAll('.app-tile').forEach(tile => {
-      const name = tile.querySelector('span').textContent.toLowerCase();
-      tile.style.display = name.includes(query) ? 'flex' : 'none';
-    });
-  });
-  
-  // ESC key
+  // Close launcher on ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      closeActivitiesOverview();
+      closeAppLauncher();
     }
   });
 }
 
-// Clock
-function updateClock() {
-  const now = new Date();
-  const clock = document.getElementById('topBarClock');
+// ============================================
+// APP LAUNCHER
+// ============================================
+
+function toggleAppLauncher() {
+  const launcher = document.getElementById('appLauncher');
+  const btn = document.getElementById('appMenuBtn');
   
-  if (clock) {
-    const dateEl = clock.querySelector('.clock-date');
-    const timeEl = clock.querySelector('.clock-time');
-    
-    if (dateEl) {
-      dateEl.textContent = now.toLocaleDateString('en-US', { 
-        weekday: 'short', 
-        month: 'short', 
-        day: 'numeric' 
-      });
-    }
-    
-    if (timeEl) {
-      timeEl.textContent = now.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      });
-    }
+  if (launcher.classList.contains('hidden')) {
+    launcher.classList.remove('hidden');
+    btn.classList.add('active');
+    document.getElementById('launcherSearch')?.focus();
+  } else {
+    closeAppLauncher();
   }
 }
 
-// App Management
+function closeAppLauncher() {
+  document.getElementById('appLauncher')?.classList.add('hidden');
+  document.getElementById('appMenuBtn')?.classList.remove('active');
+  const searchInput = document.getElementById('launcherSearch');
+  if (searchInput) {
+    searchInput.value = '';
+  }
+  // Reset search
+  document.querySelectorAll('.app-item').forEach(item => {
+    item.style.display = 'flex';
+  });
+}
+
+function openFolder(folderId) {
+  showNotification('Folder', `Opening ${folderId} folder...`);
+  // Could implement folder view here
+}
+
+// ============================================
+// APP MANAGEMENT
+// ============================================
+
 function openApp(appId, options = {}) {
   const app = Applications[appId];
   if (!app) {
@@ -163,18 +194,8 @@ function openApp(appId, options = {}) {
   
   // Cloud apps open in new tabs
   if (app.isCloudApp && app.openInTab) {
-    const width = 1400;
-    const height = 900;
-    const left = (screen.width - width) / 2;
-    const top = (screen.height - height) / 2;
-    
-    window.open(
-      app.url,
-      '_blank',
-      `width=${width},height=${height},left=${left},top=${top},resizable=yes`
-    );
-    
-    showNotification(app.name, `Opening ${app.description}...`);
+    window.open(app.url, '_blank');
+    showNotification(app.name, 'Opening in new tab...');
     return;
   }
   
@@ -196,9 +217,9 @@ function createWindow(appId, app, options = {}) {
   
   // Size and position
   const width = 900;
-  const height = 650;
+  const height = 600;
   const left = (window.innerWidth - width) / 2 + (System.windows.size * 30);
-  const top = 120 + (System.windows.size * 30);
+  const top = 80 + (System.windows.size * 30);
   
   windowEl.style.width = `${width}px`;
   windowEl.style.height = `${height}px`;
@@ -212,9 +233,15 @@ function createWindow(appId, app, options = {}) {
         <span>${app.name}</span>
       </div>
       <div class="window-controls">
-        <button class="window-btn minimize"></button>
-        <button class="window-btn maximize"></button>
-        <button class="window-btn close"></button>
+        <button class="window-btn minimize">
+          <i class="fas fa-window-minimize"></i>
+        </button>
+        <button class="window-btn maximize">
+          <i class="fas fa-window-maximize"></i>
+        </button>
+        <button class="window-btn close">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
     </div>
     <div class="window-content"></div>
@@ -222,7 +249,7 @@ function createWindow(appId, app, options = {}) {
   
   document.getElementById('windowsContainer').appendChild(windowEl);
   
-  // Render app
+  // Render app content
   const container = windowEl.querySelector('.window-content');
   if (app.render) {
     app.render(container, windowId, options);
@@ -238,8 +265,7 @@ function createWindow(appId, app, options = {}) {
     isMaximized: false
   });
   
-  addToTopBar(appId, app);
-  updateDock();
+  addToTaskbar(appId, app);
   focusWindow(appId);
 }
 
@@ -277,7 +303,7 @@ function focusWindow(appId) {
   win.element.style.zIndex = System.windowZIndex++;
   System.activeWindow = appId;
   
-  updateTopBar();
+  updateTaskbar();
 }
 
 function minimizeWindow(appId) {
@@ -285,7 +311,7 @@ function minimizeWindow(appId) {
   if (win) {
     win.element.classList.add('minimized');
     win.isMinimized = true;
-    updateTopBar();
+    updateTaskbar();
   }
 }
 
@@ -302,12 +328,14 @@ function closeWindow(appId) {
   if (win) {
     win.element.remove();
     System.windows.delete(appId);
-    removeFromTopBar(appId);
-    updateDock();
+    removeFromTaskbar(appId);
   }
 }
 
-// Window Dragging
+// ============================================
+// WINDOW DRAGGING
+// ============================================
+
 function startDragging(appId, e) {
   const win = System.windows.get(appId);
   if (!win || win.isMaximized) return;
@@ -331,7 +359,7 @@ function handleDragging(e) {
   if (!win) return;
   
   const x = e.clientX - System.dragOffset.x;
-  const y = Math.max(36, e.clientY - System.dragOffset.y);
+  const y = Math.max(0, e.clientY - System.dragOffset.y);
   
   win.element.style.left = `${x}px`;
   win.element.style.top = `${y}px`;
@@ -342,14 +370,18 @@ function stopDragging() {
   System.dragWindow = null;
 }
 
-// Top Bar
-function addToTopBar(appId, app) {
-  const topBarApps = document.getElementById('topBarApps');
+// ============================================
+// TASKBAR
+// ============================================
+
+function addToTaskbar(appId, app) {
+  const taskbarApps = document.getElementById('taskbarApps');
   
   const btn = document.createElement('button');
-  btn.className = 'top-bar-app';
-  btn.id = `top-bar-${appId}`;
-  btn.innerHTML = `<i class="${app.icon}"></i><span>${app.name}</span>`;
+  btn.className = 'taskbar-app';
+  btn.id = `taskbar-${appId}`;
+  btn.innerHTML = `<i class="${app.icon}"></i>`;
+  btn.title = app.name;
   btn.addEventListener('click', () => {
     const win = System.windows.get(appId);
     if (win?.isMinimized || System.activeWindow !== appId) {
@@ -359,131 +391,107 @@ function addToTopBar(appId, app) {
     }
   });
   
-  topBarApps.appendChild(btn);
-  updateTopBar();
+  taskbarApps.appendChild(btn);
+  updateTaskbar();
 }
 
-function removeFromTopBar(appId) {
-  document.getElementById(`top-bar-${appId}`)?.remove();
+function removeFromTaskbar(appId) {
+  document.getElementById(`taskbar-${appId}`)?.remove();
 }
 
-function updateTopBar() {
-  document.querySelectorAll('.top-bar-app').forEach(btn => {
-    const appId = btn.id.replace('top-bar-', '');
+function updateTaskbar() {
+  document.querySelectorAll('.taskbar-app').forEach(btn => {
+    const appId = btn.id.replace('taskbar-', '');
     const win = System.windows.get(appId);
     btn.classList.toggle('active', win && !win.isMinimized && System.activeWindow === appId);
   });
 }
 
-// Dock
-function updateDock() {
-  document.querySelectorAll('.dock-app[data-app]').forEach(btn => {
-    const appId = btn.dataset.app;
-    btn.classList.toggle('active', System.windows.has(appId));
-  });
-}
+// ============================================
+// CLOCK
+// ============================================
 
-// Activities
-function toggleActivitiesOverview() {
-  const overview = document.getElementById('activitiesOverview');
-  const btn = document.getElementById('activitiesBtn');
+function updateClock() {
+  const now = new Date();
+  const clock = document.getElementById('taskbarClock');
   
-  overview.classList.toggle('hidden');
-  btn.classList.toggle('active');
-  
-  if (!overview.classList.contains('hidden')) {
-    document.getElementById('activitiesSearch')?.focus();
+  if (clock) {
+    const timeEl = clock.querySelector('.clock-time');
+    const dateEl = clock.querySelector('.clock-date');
+    
+    if (timeEl) {
+      timeEl.textContent = now.toLocaleTimeString('en-US', { 
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+    }
+    
+    if (dateEl) {
+      dateEl.textContent = now.toLocaleDateString('en-US', { 
+        weekday: 'short',
+        month: 'numeric',
+        day: 'numeric'
+      });
+    }
   }
 }
 
-function closeActivitiesOverview() {
-  document.getElementById('activitiesOverview')?.classList.add('hidden');
-  document.getElementById('activitiesBtn')?.classList.remove('active');
-}
+// ============================================
+// NOTIFICATIONS
+// ============================================
 
-// Menus
-function toggleSystemMenu() {
-  const menu = document.getElementById('systemMenu');
-  menu.classList.toggle('hidden');
-}
-
-function toggleCloudPanel() {
-  const panel = document.getElementById('cloudPanel');
-  panel.classList.toggle('hidden');
-}
-
-function closeCloudPanel() {
-  document.getElementById('cloudPanel')?.classList.add('hidden');
-}
-
-// Context Menu
-function handleContextMenu(e) {
-  if (e.target.closest('.window, .top-bar, .dock')) return;
-  
-  e.preventDefault();
-  showContextMenu(e.clientX, e.clientY);
-}
-
-function showContextMenu(x, y) {
-  const menu = document.getElementById('contextMenu');
-  menu.innerHTML = `
-    <div class="context-item" onclick="openApp('cloud-pc'); closeContextMenu()">
-      <i class="fas fa-desktop"></i>
-      <span>Open Windows 365</span>
-    </div>
-    <div class="context-item" onclick="openApp('avd'); closeContextMenu()">
-      <i class="fas fa-cloud"></i>
-      <span>Open Azure VD</span>
-    </div>
-    <div class="context-item" onclick="openApp('terminal'); closeContextMenu()">
-      <i class="fas fa-terminal"></i>
-      <span>Open Terminal</span>
-    </div>
-    <div class="context-item" onclick="openApp('settings'); closeContextMenu()">
-      <i class="fas fa-cog"></i>
-      <span>Settings</span>
-    </div>
-  `;
-  
-  menu.style.left = `${x}px`;
-  menu.style.top = `${y}px`;
-  menu.classList.remove('hidden');
-}
-
-function closeContextMenu() {
-  document.getElementById('contextMenu')?.classList.add('hidden');
-}
-
-// Notifications
 function showNotification(title, body = '') {
-  const container = document.getElementById('notificationContainer');
+  // Create notification container if it doesn't exist
+  let container = document.getElementById('notificationContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'notificationContainer';
+    container.className = 'notification-container';
+    document.body.appendChild(container);
+  }
   
+  // Create notification
   const notif = document.createElement('div');
   notif.className = 'notification';
   notif.innerHTML = `
-    <div class="notification-title">${title}</div>
-    ${body ? `<div class="notification-body">${body}</div>` : ''}
+    <div class="notification-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="notification-content">
+      <div class="notification-title">${title}</div>
+      ${body ? `<div class="notification-body">${body}</div>` : ''}
+    </div>
+    <button class="notification-close">
+      <i class="fas fa-times"></i>
+    </button>
   `;
   
+  // Add to container
   container.appendChild(notif);
   
+  // Animate in
+  setTimeout(() => notif.classList.add('show'), 10);
+  
+  // Close button
+  notif.querySelector('.notification-close').addEventListener('click', () => {
+    removeNotification(notif);
+  });
+  
+  // Auto remove after 4 seconds
   setTimeout(() => {
-    notif.style.opacity = '0';
-    notif.style.transform = 'translateX(100%)';
-    notif.style.transition = 'all 0.3s ease';
-    setTimeout(() => notif.remove(), 300);
+    removeNotification(notif);
   }, 4000);
 }
 
-// PWA
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(err => {
-    console.log('SW registration failed:', err);
-  });
+function removeNotification(notif) {
+  notif.classList.remove('show');
+  setTimeout(() => notif.remove(), 300);
 }
 
-// Global exports
+// ============================================
+// GLOBAL EXPORTS
+// ============================================
+
 window.openApp = openApp;
-window.logout = logout;
-window.lockScreen = lockScreen;
-window.closeCloudPanel = closeCloudPanel;
+window.toggleAppLauncher = toggleAppLauncher;
+window.closeAppLauncher = closeAppLauncher;
