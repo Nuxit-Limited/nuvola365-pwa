@@ -38,6 +38,11 @@ body {
   color: var(--dex-text);
   overflow: hidden;
   height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .hidden {
@@ -193,6 +198,7 @@ body {
   justify-content: center;
   gap: 12px;
   padding: 14px 24px;
+  min-height: 48px;
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -200,6 +206,8 @@ body {
   cursor: pointer;
   transition: all var(--transition);
   font-family: 'Roboto', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .auth-btn.primary {
@@ -213,6 +221,11 @@ body {
   box-shadow: 0 6px 20px rgba(0, 120, 212, 0.4);
 }
 
+.auth-btn.primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.3);
+}
+
 .auth-btn.secondary {
   background: var(--dex-surface-light);
   color: var(--dex-text);
@@ -222,6 +235,10 @@ body {
 .auth-btn.secondary:hover {
   background: var(--dex-surface);
   border-color: var(--nuvola-blue);
+}
+
+.auth-btn.secondary:active {
+  background: var(--dex-border);
 }
 
 .auth-btn i {
@@ -302,6 +319,9 @@ body {
   border-radius: 8px;
   transition: all var(--transition);
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  min-height: 120px;
 }
 
 .desktop-icon:hover {
@@ -725,6 +745,8 @@ body {
 .taskbar-btn {
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border: none;
   background: transparent;
   color: var(--dex-text);
@@ -735,6 +757,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .taskbar-btn:hover {

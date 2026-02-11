@@ -31,13 +31,23 @@ function bootSystem() {
 
 function initializeAuth() {
   // Sign In button
-  document.getElementById('signInBtn').addEventListener('click', () => {
-    handleAuth('signin');
+  const signInBtn = document.getElementById('signInBtn');
+  const signUpBtn = document.getElementById('signUpBtn');
+  
+  const handleSignIn = () => handleAuth('signin');
+  const handleSignUp = () => handleAuth('signup');
+  
+  // Add both click and touch events
+  signInBtn.addEventListener('click', handleSignIn);
+  signInBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    handleSignIn();
   });
   
-  // Sign Up button
-  document.getElementById('signUpBtn').addEventListener('click', () => {
-    handleAuth('signup');
+  signUpBtn.addEventListener('click', handleSignUp);
+  signUpBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    handleSignUp();
   });
 }
 
@@ -75,55 +85,137 @@ function initializeDesktop() {
   updateClock();
   setInterval(updateClock, 1000);
   
-  // Desktop Icons - Double click to open
+  // Desktop Icons - Support both double-click and touch
   document.querySelectorAll('.desktop-icon').forEach(icon => {
+    let touchTimeout = null;
+    let lastTap = 0;
+    
+    // Double-click for desktop
     icon.addEventListener('dblclick', () => {
       const appId = icon.dataset.app;
       openApp(appId);
     });
+    
+    // Touch events for mobile
+    icon.addEventListener('touchstart', (e) => {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      
+      if (tapLength < 500 && tapLength > 0) {
+        // Double tap detected
+        e.preventDefault();
+        const appId = icon.dataset.app;
+        openApp(appId);
+        lastTap = 0;
+      } else {
+        // Single tap - highlight icon
+        lastTap = currentTime;
+        icon.style.background = 'rgba(255, 255, 255, 0.15)';
+        
+        // Clear highlight after delay
+        if (touchTimeout) clearTimeout(touchTimeout);
+        touchTimeout = setTimeout(() => {
+          icon.style.background = '';
+        }, 300);
+      }
+    });
+    
+    // Single click for mobile (fallback)
+    let clickCount = 0;
+    let clickTimer = null;
+    icon.addEventListener('click', (e) => {
+      clickCount++;
+      if (clickCount === 1) {
+        clickTimer = setTimeout(() => {
+          clickCount = 0;
+        }, 300);
+      } else if (clickCount === 2) {
+        clearTimeout(clickTimer);
+        clickCount = 0;
+        const appId = icon.dataset.app;
+        openApp(appId);
+      }
+    });
   });
   
-  // App Menu Button
-  document.getElementById('appMenuBtn').addEventListener('click', toggleAppLauncher);
+  // App Menu Button - Support touch
+  const appMenuBtn = document.getElementById('appMenuBtn');
+  appMenuBtn.addEventListener('click', toggleAppLauncher);
+  appMenuBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    toggleAppLauncher();
+  });
   
-  // Launcher Close
-  document.getElementById('launcherClose')?.addEventListener('click', closeAppLauncher);
+  // Launcher Close - Support touch
+  const launcherClose = document.getElementById('launcherClose');
+  if (launcherClose) {
+    launcherClose.addEventListener('click', closeAppLauncher);
+    launcherClose.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      closeAppLauncher();
+    });
+  }
   
-  // App Items in Launcher
+  // App Items in Launcher - Support touch
   document.querySelectorAll('.app-item').forEach(item => {
-    item.addEventListener('click', () => {
+    const handleAppLaunch = () => {
       const appId = item.dataset.app;
       openApp(appId);
       closeAppLauncher();
+    };
+    
+    item.addEventListener('click', handleAppLaunch);
+    item.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleAppLaunch();
     });
   });
   
-  // App Folders
+  // App Folders - Support touch
   document.querySelectorAll('.app-folder').forEach(folder => {
-    folder.addEventListener('click', () => {
+    const handleFolderOpen = () => {
       const folderId = folder.dataset.folder;
       openFolder(folderId);
+    };
+    
+    folder.addEventListener('click', handleFolderOpen);
+    folder.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleFolderOpen();
     });
   });
   
-  // Lock/Exit DeX
-  document.getElementById('lockDex')?.addEventListener('click', () => {
-    // Lock screen - just close launcher for now
-    closeAppLauncher();
-    showNotification('Screen Locked', 'Click to unlock');
-  });
+  // Lock/Exit DeX - Support touch
+  const lockBtn = document.getElementById('lockDex');
+  const exitBtn = document.getElementById('exitDex');
   
-  document.getElementById('exitDex')?.addEventListener('click', () => {
-    if (confirm('Sign out and exit DeX mode?')) {
-      // Clear auth state
-      localStorage.removeItem('nuvola365_auth');
-      localStorage.removeItem('nuvola365_auth_type');
-      localStorage.removeItem('nuvola365_auth_time');
-      
-      // Reload to login screen
-      location.reload();
-    }
-  });
+  if (lockBtn) {
+    const handleLock = () => {
+      closeAppLauncher();
+      showNotification('Screen Locked', 'Click to unlock');
+    };
+    lockBtn.addEventListener('click', handleLock);
+    lockBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleLock();
+    });
+  }
+  
+  if (exitBtn) {
+    const handleExit = () => {
+      if (confirm('Sign out and exit DeX mode?')) {
+        localStorage.removeItem('nuvola365_auth');
+        localStorage.removeItem('nuvola365_auth_type');
+        localStorage.removeItem('nuvola365_auth_time');
+        location.reload();
+      }
+    };
+    exitBtn.addEventListener('click', handleExit);
+    exitBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleExit();
+    });
+  }
   
   // Launcher Search
   document.getElementById('launcherSearch')?.addEventListener('input', (e) => {
@@ -137,6 +229,8 @@ function initializeDesktop() {
   // Window management
   document.addEventListener('mousemove', handleDragging);
   document.addEventListener('mouseup', stopDragging);
+  document.addEventListener('touchmove', handleDragging);
+  document.addEventListener('touchend', stopDragging);
   
   // Close launcher on ESC
   document.addEventListener('keydown', (e) => {
@@ -144,6 +238,22 @@ function initializeDesktop() {
       closeAppLauncher();
     }
   });
+  
+  // Prevent zoom on double-tap for iOS
+  document.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+  
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', (e) => {
+    const now = new Date().getTime();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, false);
 }
 
 // ============================================
@@ -194,8 +304,29 @@ function openApp(appId, options = {}) {
   
   // Cloud apps open in new tabs
   if (app.isCloudApp && app.openInTab) {
-    window.open(app.url, '_blank');
-    showNotification(app.name, 'Opening in new tab...');
+    let launchUrl = app.url;
+    
+    // Check for direct launch configuration
+    if (window.CloudConfig && window.CloudConfig.launchCloudApp) {
+      const hasDirectLaunch = window.CloudConfig.launchCloudApp(appId);
+      if (hasDirectLaunch) {
+        showNotification(app.name, 'Launching with direct URL...');
+        return;
+      }
+    }
+    
+    // Use configured direct launch URL if available
+    if (appId === 'cloud-pc' && window.CloudConfig?.windows365.cloudPcId) {
+      launchUrl = window.CloudConfig.windows365.getLaunchUrl();
+      showNotification(app.name, 'Launching Cloud PC directly...');
+    } else if (appId === 'avd' && window.CloudConfig?.avd.workspaceId && window.CloudConfig?.avd.resourceId) {
+      launchUrl = window.CloudConfig.avd.getLaunchUrl();
+      showNotification(app.name, 'Launching AVD resource directly...');
+    } else {
+      showNotification(app.name, 'Opening in new tab...');
+    }
+    
+    window.open(launchUrl, '_blank');
     return;
   }
   
