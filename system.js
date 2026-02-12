@@ -1,6 +1,6 @@
 // ============================================
 // NUVOLA365 - Samsung DeX System
-// Complete with Auth & Desktop Icons
+// Complete with Mobile Touch Support
 // ============================================
 
 const System = {
@@ -30,49 +30,39 @@ function bootSystem() {
 }
 
 function initializeAuth() {
-  // Sign In button
   const signInBtn = document.getElementById('signInBtn');
   const signUpBtn = document.getElementById('signUpBtn');
   
-  const handleSignIn = () => handleAuth('signin');
-  const handleSignUp = () => handleAuth('signup');
+  console.log('🔧 Initializing auth buttons');
   
-  // Add both click and touch events
-  signInBtn.addEventListener('click', handleSignIn);
-  signInBtn.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    handleSignIn();
-  });
+  // Use onclick for maximum mobile compatibility
+  signInBtn.onclick = function() {
+    console.log('✅ Sign In clicked!');
+    handleAuth('signin');
+  };
   
-  signUpBtn.addEventListener('click', handleSignUp);
-  signUpBtn.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    handleSignUp();
-  });
+  signUpBtn.onclick = function() {
+    console.log('✅ Sign Up clicked!');
+    handleAuth('signup');
+  };
 }
 
 function handleAuth(type) {
-  // Show loading state
   const authScreen = document.getElementById('authScreen');
   const btn = type === 'signin' ? document.getElementById('signInBtn') : document.getElementById('signUpBtn');
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Authenticating...</span>';
   
-  // Simulate authentication (replace with real Microsoft OAuth in production)
   setTimeout(() => {
-    // Store auth state
     localStorage.setItem('nuvola365_auth', 'true');
     localStorage.setItem('nuvola365_auth_type', type);
     localStorage.setItem('nuvola365_auth_time', new Date().toISOString());
     
-    // Hide auth screen, show desktop
     authScreen.classList.add('hidden');
     document.getElementById('desktop').classList.remove('hidden');
     
-    // Initialize desktop
     initializeDesktop();
     
-    // Welcome message
     const authType = type === 'signin' ? 'Signed in' : 'Account created';
     setTimeout(() => {
       showNotification('Welcome to Nuvola365', `${authType} successfully!`);
@@ -81,128 +71,94 @@ function handleAuth(type) {
 }
 
 function initializeDesktop() {
-  // Update clock
   updateClock();
   setInterval(updateClock, 1000);
   
-  // Desktop Icons - Support both double-click and touch
-  document.querySelectorAll('.desktop-icon').forEach(icon => {
-    let touchTimeout = null;
-    let lastTap = 0;
+  console.log('🔧 Initializing desktop');
+  
+  // Desktop Icons - onclick with double-tap detection
+  const icons = document.querySelectorAll('.desktop-icon');
+  console.log('Found', icons.length, 'desktop icons');
+  
+  icons.forEach((icon, index) => {
+    let tapCount = 0;
+    let tapTimer = null;
     
-    // Double-click for desktop
-    icon.addEventListener('dblclick', () => {
-      const appId = icon.dataset.app;
-      openApp(appId);
-    });
-    
-    // Touch events for mobile
-    icon.addEventListener('touchstart', (e) => {
-      const currentTime = new Date().getTime();
-      const tapLength = currentTime - lastTap;
+    icon.onclick = function() {
+      console.log(`Icon clicked: ${icon.dataset.app}, count: ${tapCount + 1}`);
+      tapCount++;
       
-      if (tapLength < 500 && tapLength > 0) {
-        // Double tap detected
-        e.preventDefault();
-        const appId = icon.dataset.app;
-        openApp(appId);
-        lastTap = 0;
-      } else {
-        // Single tap - highlight icon
-        lastTap = currentTime;
+      if (tapCount === 1) {
         icon.style.background = 'rgba(255, 255, 255, 0.15)';
-        
-        // Clear highlight after delay
-        if (touchTimeout) clearTimeout(touchTimeout);
-        touchTimeout = setTimeout(() => {
+        tapTimer = setTimeout(() => {
           icon.style.background = '';
-        }, 300);
-      }
-    });
-    
-    // Single click for mobile (fallback)
-    let clickCount = 0;
-    let clickTimer = null;
-    icon.addEventListener('click', (e) => {
-      clickCount++;
-      if (clickCount === 1) {
-        clickTimer = setTimeout(() => {
-          clickCount = 0;
-        }, 300);
-      } else if (clickCount === 2) {
-        clearTimeout(clickTimer);
-        clickCount = 0;
+          tapCount = 0;
+        }, 400);
+      } else if (tapCount === 2) {
+        clearTimeout(tapTimer);
+        tapCount = 0;
+        icon.style.background = '';
         const appId = icon.dataset.app;
+        console.log('🚀 Opening app:', appId);
         openApp(appId);
       }
-    });
+    };
   });
   
-  // App Menu Button - Support touch
+  // App Menu Button
   const appMenuBtn = document.getElementById('appMenuBtn');
-  appMenuBtn.addEventListener('click', toggleAppLauncher);
-  appMenuBtn.addEventListener('touchend', (e) => {
-    e.preventDefault();
+  appMenuBtn.onclick = function() {
+    console.log('✅ App menu clicked');
     toggleAppLauncher();
-  });
+  };
   
-  // Launcher Close - Support touch
+  // Launcher Close
   const launcherClose = document.getElementById('launcherClose');
   if (launcherClose) {
-    launcherClose.addEventListener('click', closeAppLauncher);
-    launcherClose.addEventListener('touchend', (e) => {
-      e.preventDefault();
+    launcherClose.onclick = function() {
+      console.log('✅ Launcher close clicked');
       closeAppLauncher();
-    });
+    };
   }
   
-  // App Items in Launcher - Support touch
-  document.querySelectorAll('.app-item').forEach(item => {
-    const handleAppLaunch = () => {
+  // App Items in Launcher
+  const appItems = document.querySelectorAll('.app-item');
+  console.log('Found', appItems.length, 'app items');
+  appItems.forEach(item => {
+    item.onclick = function() {
       const appId = item.dataset.app;
+      console.log('✅ App item clicked:', appId);
       openApp(appId);
       closeAppLauncher();
     };
-    
-    item.addEventListener('click', handleAppLaunch);
-    item.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleAppLaunch();
-    });
   });
   
-  // App Folders - Support touch
-  document.querySelectorAll('.app-folder').forEach(folder => {
-    const handleFolderOpen = () => {
+  // App Folders
+  const folders = document.querySelectorAll('.app-folder');
+  console.log('Found', folders.length, 'folders');
+  folders.forEach(folder => {
+    folder.onclick = function() {
       const folderId = folder.dataset.folder;
+      console.log('✅ Folder clicked:', folderId);
       openFolder(folderId);
     };
-    
-    folder.addEventListener('click', handleFolderOpen);
-    folder.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleFolderOpen();
-    });
   });
   
-  // Lock/Exit DeX - Support touch
+  // Lock DeX
   const lockBtn = document.getElementById('lockDex');
-  const exitBtn = document.getElementById('exitDex');
-  
   if (lockBtn) {
-    const handleLock = () => {
+    lockBtn.onclick = function() {
+      console.log('✅ Lock clicked');
       closeAppLauncher();
       showNotification('Screen Locked', 'Click to unlock');
     };
-    lockBtn.addEventListener('click', handleLock);
-    lockBtn.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleLock();
-    });
   }
   
+  // Exit DeX
+  const exitBtn = document.getElementById('exitDex');
   if (exitBtn) {
-    const handleExit = () => {
+    exitBtn.onclick = function() {
+      console.log('✅ Exit clicked');
       if (confirm('Sign out and exit DeX mode?')) {
         localStorage.removeItem('nuvola365_auth');
         localStorage.removeItem('nuvola365_auth_type');
@@ -210,27 +166,80 @@ function initializeDesktop() {
         location.reload();
       }
     };
-    exitBtn.addEventListener('click', handleExit);
-    exitBtn.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleExit();
-    });
   }
   
   // Launcher Search
-  document.getElementById('launcherSearch')?.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    document.querySelectorAll('.app-item').forEach(item => {
-      const name = item.querySelector('span').textContent.toLowerCase();
-      item.style.display = name.includes(query) ? 'flex' : 'none';
-    });
-  });
+  const searchInput = document.getElementById('launcherSearch');
+  if (searchInput) {
+    searchInput.oninput = function(e) {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.app-item').forEach(item => {
+        const name = item.querySelector('span').textContent.toLowerCase();
+        item.style.display = name.includes(query) ? 'flex' : 'none';
+      });
+    };
+  }
+  
+  // Fullscreen button
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  if (fullscreenBtn) {
+    fullscreenBtn.onclick = function() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          fullscreenBtn.querySelector('i').className = 'fas fa-compress';
+          showNotification('Fullscreen', 'Enabled');
+        }).catch(() => {
+          showNotification('Fullscreen', 'Not supported');
+        });
+      } else {
+        document.exitFullscreen().then(() => {
+          fullscreenBtn.querySelector('i').className = 'fas fa-expand';
+          showNotification('Fullscreen', 'Disabled');
+        });
+      }
+    };
+  }
+  
+  // Notifications button
+  const notificationsBtn = document.getElementById('notificationsBtn');
+  if (notificationsBtn) {
+    notificationsBtn.onclick = function() {
+      showNotification('Notifications', 'No new notifications');
+    };
+  }
+  
+  // Help button
+  const helpBtn = document.getElementById('helpBtn');
+  if (helpBtn) {
+    helpBtn.onclick = function() {
+      const helpText = `Nuvola365 Cloud Desktop
+
+🖱️ Desktop: Double-tap icons to open
+📁 Folders: Tap to see apps inside
+⊞ Grid: Open app launcher
+🔍 Search: Find apps quickly
+
+Cloud Apps:
+• Cloud PC: Windows 365
+• Azure VD: Virtual Desktop
+• Teams, Outlook, Office apps
+
+Keyboard: ESC closes launcher`;
+      alert(helpText);
+    };
+  }
+  
+  // Screen capture
+  const screenCaptureBtn = document.getElementById('screenCapture');
+  if (screenCaptureBtn) {
+    screenCaptureBtn.onclick = function() {
+      showNotification('Screen Capture', 'Use browser screenshot tool');
+    };
+  }
   
   // Window management
   document.addEventListener('mousemove', handleDragging);
   document.addEventListener('mouseup', stopDragging);
-  document.addEventListener('touchmove', handleDragging);
-  document.addEventListener('touchend', stopDragging);
   
   // Close launcher on ESC
   document.addEventListener('keydown', (e) => {
@@ -238,22 +247,6 @@ function initializeDesktop() {
       closeAppLauncher();
     }
   });
-  
-  // Prevent zoom on double-tap for iOS
-  document.addEventListener('touchstart', (e) => {
-    if (e.touches.length > 1) {
-      e.preventDefault();
-    }
-  }, { passive: false });
-  
-  let lastTouchEnd = 0;
-  document.addEventListener('touchend', (e) => {
-    const now = new Date().getTime();
-    if (now - lastTouchEnd <= 300) {
-      e.preventDefault();
-    }
-    lastTouchEnd = now;
-  }, false);
 }
 
 // ============================================
@@ -280,15 +273,246 @@ function closeAppLauncher() {
   if (searchInput) {
     searchInput.value = '';
   }
-  // Reset search
   document.querySelectorAll('.app-item').forEach(item => {
     item.style.display = 'flex';
   });
 }
 
 function openFolder(folderId) {
-  showNotification('Folder', `Opening ${folderId} folder...`);
-  // Could implement folder view here
+  console.log('📁 Opening folder:', folderId);
+  
+  // Close app launcher so folder is visible
+  closeAppLauncher();
+  
+  const folderContents = {
+    work: [
+      { id: 'word', name: 'Word', icon: 'fas fa-file-word' },
+      { id: 'excel', name: 'Excel', icon: 'fas fa-file-excel' },
+      { id: 'powerpoint', name: 'PowerPoint', icon: 'fas fa-file-powerpoint' },
+      { id: 'onenote', name: 'OneNote', icon: 'fas fa-book' }
+    ],
+    cloud: [
+      { id: 'cloud-pc', name: 'Cloud PC', icon: 'fas fa-desktop' },
+      { id: 'avd', name: 'Azure VD', icon: 'fas fa-cloud' },
+      { id: 'onedrive', name: 'OneDrive', icon: 'fas fa-cloud-upload-alt' }
+    ],
+    media: [
+      { id: 'browser', name: 'Browser', icon: 'fas fa-globe' },
+      { id: 'youtube', name: 'YouTube', icon: 'fab fa-youtube', url: 'https://youtube.com' },
+      { id: 'spotify', name: 'Spotify', icon: 'fab fa-spotify', url: 'https://open.spotify.com' }
+    ],
+    utilities: [
+      { id: 'terminal', name: 'Terminal', icon: 'fas fa-terminal' },
+      { id: 'files', name: 'Files', icon: 'fas fa-folder' },
+      { id: 'settings', name: 'Settings', icon: 'fas fa-cog' },
+      { id: 'calculator', name: 'Calculator', icon: 'fas fa-calculator' }
+    ]
+  };
+  
+  const apps = folderContents[folderId];
+  if (!apps) {
+    showNotification('Folder', 'No apps in this folder');
+    return;
+  }
+  
+  const folderName = folderId.charAt(0).toUpperCase() + folderId.slice(1);
+  const windowId = `folder-${folderId}-${Date.now()}`;
+  const windowEl = document.createElement('div');
+  windowEl.className = 'window';
+  windowEl.id = windowId;
+  
+  // Make sure folder appears on top with high z-index
+  System.windowZIndex += 100; // Jump z-index to ensure it's on top
+  windowEl.style.zIndex = System.windowZIndex;
+  
+  const width = 600;
+  const height = 400;
+  const left = (window.innerWidth - width) / 2;
+  const top = 100;
+  
+  windowEl.style.width = `${width}px`;
+  windowEl.style.height = `${height}px`;
+  windowEl.style.left = `${left}px`;
+  windowEl.style.top = `${top}px`;
+  
+  windowEl.innerHTML = `
+    <div class="window-titlebar">
+      <div class="window-title">
+        <i class="fas fa-folder"></i>
+        <span>${folderName} Folder</span>
+      </div>
+      <div class="window-controls">
+        <button class="window-btn minimize">
+          <i class="fas fa-window-minimize"></i>
+        </button>
+        <button class="window-btn maximize">
+          <i class="fas fa-window-maximize"></i>
+        </button>
+        <button class="window-btn close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="window-content folder-content">
+      <div class="folder-grid">
+        ${apps.map(app => `
+          <div class="folder-app-item" data-app="${app.id}" data-url="${app.url || ''}">
+            <div class="folder-app-icon">
+              <i class="${app.icon}"></i>
+            </div>
+            <span>${app.name}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('windowsContainer').appendChild(windowEl);
+  
+  const titlebar = windowEl.querySelector('.window-titlebar');
+  const controls = windowEl.querySelectorAll('.window-btn');
+  
+  controls[0].onclick = function() {
+    windowEl.classList.add('minimized');
+  };
+  
+  controls[1].onclick = function() {
+    windowEl.classList.toggle('maximized');
+  };
+  
+  controls[2].onclick = function() {
+    windowEl.remove();
+  };
+  
+  titlebar.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.window-btn')) return;
+    startDragging(windowId, e, windowEl);
+  });
+  
+  windowEl.addEventListener('mousedown', () => {
+    windowEl.style.zIndex = System.windowZIndex++;
+  });
+  
+  // Handle folder app clicks with onclick
+  windowEl.querySelectorAll('.folder-app-item').forEach(item => {
+    item.onclick = function() {
+      const appId = item.dataset.app;
+      const appUrl = item.dataset.url;
+      
+      console.log('✅ Folder app clicked:', appId);
+      
+      if (appUrl) {
+        // Open external URLs embedded in iframe
+        createEmbeddedWindow(item.querySelector('span').textContent, appUrl);
+      } else {
+        openApp(appId);
+      }
+    };
+  });
+  
+  showNotification(folderName, `${apps.length} apps available`);
+}
+
+function startDragging(windowId, e, windowEl) {
+  System.isDragging = true;
+  System.dragWindow = windowEl;
+  
+  const rect = windowEl.getBoundingClientRect();
+  System.dragOffset = {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
+  };
+}
+
+// ============================================
+// EMBEDDED WINDOW (iframe for cloud apps)
+// ============================================
+
+function createEmbeddedWindow(appName, url, icon = 'fas fa-globe') {
+  const windowId = `embedded-${Date.now()}`;
+  const windowEl = document.createElement('div');
+  windowEl.className = 'window';
+  windowEl.id = windowId;
+  windowEl.style.zIndex = System.windowZIndex++;
+  
+  const width = 1200;
+  const height = 700;
+  const left = (window.innerWidth - width) / 2;
+  const top = 50;
+  
+  windowEl.style.width = `${width}px`;
+  windowEl.style.height = `${height}px`;
+  windowEl.style.left = `${left}px`;
+  windowEl.style.top = `${top}px`;
+  
+  windowEl.innerHTML = `
+    <div class="window-titlebar">
+      <div class="window-title">
+        <i class="${icon}"></i>
+        <span>${appName}</span>
+      </div>
+      <div class="window-controls">
+        <button class="window-btn minimize">
+          <i class="fas fa-window-minimize"></i>
+        </button>
+        <button class="window-btn maximize">
+          <i class="fas fa-window-maximize"></i>
+        </button>
+        <button class="window-btn close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="window-content iframe-container">
+      <div class="iframe-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading ${appName}...</p>
+      </div>
+      <iframe src="${url}" class="embedded-iframe"></iframe>
+    </div>
+  `;
+  
+  document.getElementById('windowsContainer').appendChild(windowEl);
+  
+  const titlebar = windowEl.querySelector('.window-titlebar');
+  const controls = windowEl.querySelectorAll('.window-btn');
+  const iframe = windowEl.querySelector('.embedded-iframe');
+  const loading = windowEl.querySelector('.iframe-loading');
+  
+  // Hide loading indicator when iframe loads
+  iframe.onload = function() {
+    loading.style.display = 'none';
+  };
+  
+  controls[0].onclick = function() {
+    windowEl.classList.add('minimized');
+  };
+  
+  controls[1].onclick = function() {
+    windowEl.classList.toggle('maximized');
+  };
+  
+  controls[2].onclick = function() {
+    windowEl.remove();
+  };
+  
+  titlebar.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.window-btn')) return;
+    System.isDragging = true;
+    System.dragWindow = windowEl;
+    
+    const rect = windowEl.getBoundingClientRect();
+    System.dragOffset = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  });
+  
+  windowEl.addEventListener('mousedown', () => {
+    windowEl.style.zIndex = System.windowZIndex++;
+  });
+  
+  showNotification(appName, 'Opening embedded...');
 }
 
 // ============================================
@@ -302,20 +526,11 @@ function openApp(appId, options = {}) {
     return;
   }
   
-  // Cloud apps open in new tabs
+  // Cloud apps - open embedded in iframe instead of new tab
   if (app.isCloudApp && app.openInTab) {
     let launchUrl = app.url;
     
     // Check for direct launch configuration
-    if (window.CloudConfig && window.CloudConfig.launchCloudApp) {
-      const hasDirectLaunch = window.CloudConfig.launchCloudApp(appId);
-      if (hasDirectLaunch) {
-        showNotification(app.name, 'Launching with direct URL...');
-        return;
-      }
-    }
-    
-    // Use configured direct launch URL if available
     if (appId === 'cloud-pc' && window.CloudConfig?.windows365.cloudPcId) {
       launchUrl = window.CloudConfig.windows365.getLaunchUrl();
       showNotification(app.name, 'Launching Cloud PC directly...');
@@ -323,10 +538,11 @@ function openApp(appId, options = {}) {
       launchUrl = window.CloudConfig.avd.getLaunchUrl();
       showNotification(app.name, 'Launching AVD resource directly...');
     } else {
-      showNotification(app.name, 'Opening in new tab...');
+      showNotification(app.name, 'Opening embedded...');
     }
     
-    window.open(launchUrl, '_blank');
+    // Create embedded iframe window instead of opening new tab
+    createEmbeddedWindow(app.name, launchUrl, app.icon);
     return;
   }
   
@@ -346,7 +562,6 @@ function createWindow(appId, app, options = {}) {
   windowEl.id = windowId;
   windowEl.style.zIndex = System.windowZIndex++;
   
-  // Size and position
   const width = 900;
   const height = 600;
   const left = (window.innerWidth - width) / 2 + (System.windows.size * 30);
@@ -380,7 +595,6 @@ function createWindow(appId, app, options = {}) {
   
   document.getElementById('windowsContainer').appendChild(windowEl);
   
-  // Render app content
   const container = windowEl.querySelector('.window-content');
   if (app.render) {
     app.render(container, windowId, options);
@@ -404,9 +618,9 @@ function setupWindowControls(windowEl, appId, windowId) {
   const titlebar = windowEl.querySelector('.window-titlebar');
   const controls = windowEl.querySelectorAll('.window-btn');
   
-  controls[0].addEventListener('click', () => minimizeWindow(appId));
-  controls[1].addEventListener('click', () => toggleMaximizeWindow(appId));
-  controls[2].addEventListener('click', () => closeWindow(appId));
+  controls[0].onclick = function() { minimizeWindow(appId); };
+  controls[1].onclick = function() { toggleMaximizeWindow(appId); };
+  controls[2].onclick = function() { closeWindow(appId); };
   
   titlebar.addEventListener('mousedown', (e) => {
     if (e.target.closest('.window-btn')) return;
@@ -463,16 +677,12 @@ function closeWindow(appId) {
   }
 }
 
-// ============================================
-// WINDOW DRAGGING
-// ============================================
-
 function startDragging(appId, e) {
   const win = System.windows.get(appId);
   if (!win || win.isMaximized) return;
   
   System.isDragging = true;
-  System.dragWindow = appId;
+  System.dragWindow = win.element;
   
   const rect = win.element.getBoundingClientRect();
   System.dragOffset = {
@@ -486,14 +696,14 @@ function startDragging(appId, e) {
 function handleDragging(e) {
   if (!System.isDragging || !System.dragWindow) return;
   
-  const win = System.windows.get(System.dragWindow);
-  if (!win) return;
+  const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+  const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
   
-  const x = e.clientX - System.dragOffset.x;
-  const y = Math.max(0, e.clientY - System.dragOffset.y);
+  const x = clientX - System.dragOffset.x;
+  const y = Math.max(0, clientY - System.dragOffset.y);
   
-  win.element.style.left = `${x}px`;
-  win.element.style.top = `${y}px`;
+  System.dragWindow.style.left = `${x}px`;
+  System.dragWindow.style.top = `${y}px`;
 }
 
 function stopDragging() {
@@ -513,14 +723,14 @@ function addToTaskbar(appId, app) {
   btn.id = `taskbar-${appId}`;
   btn.innerHTML = `<i class="${app.icon}"></i>`;
   btn.title = app.name;
-  btn.addEventListener('click', () => {
+  btn.onclick = function() {
     const win = System.windows.get(appId);
     if (win?.isMinimized || System.activeWindow !== appId) {
       focusWindow(appId);
     } else {
       minimizeWindow(appId);
     }
-  });
+  };
   
   taskbarApps.appendChild(btn);
   updateTaskbar();
@@ -572,7 +782,6 @@ function updateClock() {
 // ============================================
 
 function showNotification(title, body = '') {
-  // Create notification container if it doesn't exist
   let container = document.getElementById('notificationContainer');
   if (!container) {
     container = document.createElement('div');
@@ -581,7 +790,6 @@ function showNotification(title, body = '') {
     document.body.appendChild(container);
   }
   
-  // Create notification
   const notif = document.createElement('div');
   notif.className = 'notification';
   notif.innerHTML = `
@@ -597,18 +805,14 @@ function showNotification(title, body = '') {
     </button>
   `;
   
-  // Add to container
   container.appendChild(notif);
   
-  // Animate in
   setTimeout(() => notif.classList.add('show'), 10);
   
-  // Close button
-  notif.querySelector('.notification-close').addEventListener('click', () => {
+  notif.querySelector('.notification-close').onclick = function() {
     removeNotification(notif);
-  });
+  };
   
-  // Auto remove after 4 seconds
   setTimeout(() => {
     removeNotification(notif);
   }, 4000);

@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Nuvola365 Desktop</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
@@ -315,24 +317,16 @@
           <span class="capture-text">Screen capture</span>
         </button>
 
-        <button class="taskbar-icon" title="Notifications">
-          <i class="fas fa-comment"></i>
+        <button class="taskbar-icon" id="notificationsBtn" title="Notifications">
+          <i class="fas fa-bell"></i>
         </button>
 
-        <button class="taskbar-icon" title="Screen share">
-          <i class="fas fa-cast"></i>
+        <button class="taskbar-icon" id="fullscreenBtn" title="Fullscreen">
+          <i class="fas fa-expand"></i>
         </button>
 
-        <button class="taskbar-icon" title="Sound">
-          <i class="fas fa-volume-up"></i>
-        </button>
-
-        <button class="taskbar-icon" title="Battery">
-          <i class="fas fa-battery-three-quarters"></i>
-        </button>
-
-        <button class="taskbar-icon" title="WiFi">
-          <i class="fas fa-wifi"></i>
+        <button class="taskbar-icon" id="helpBtn" title="Help">
+          <i class="fas fa-question-circle"></i>
         </button>
 
         <div class="taskbar-divider"></div>
@@ -343,8 +337,8 @@
         </div>
 
         <div class="taskbar-battery">
-          <span class="battery-percent">84%</span>
-          <i class="fas fa-battery-three-quarters"></i>
+          <span class="battery-percent">Online</span>
+          <i class="fas fa-wifi"></i>
         </div>
       </div>
     </div>

@@ -128,6 +128,37 @@ Tap close → Close app
 
 ## 🐛 Troubleshooting Mobile Issues
 
+### If Buttons Still Don't Work
+
+**FIRST: Test Basic Clicking**
+
+1. Open `mobile-test.html` in your mobile browser
+2. Try tapping the test buttons
+3. If test buttons don't work, it's a browser issue
+4. If test buttons DO work, there's a code issue
+
+**Browser Issues:**
+
+1. **Update your browser** - Use latest version
+2. **Try different browser**:
+   - iOS: Try Safari AND Chrome
+   - Android: Try Chrome AND Firefox
+3. **Clear browser cache**:
+   - iOS: Settings → Safari → Clear History and Website Data
+   - Android: Chrome → Settings → Privacy → Clear browsing data
+4. **Disable "Request Desktop Site"** - Must use mobile site mode
+5. **Check JavaScript** - Must be enabled
+
+**Common Causes:**
+
+| Problem | Solution |
+|---------|----------|
+| **Ad blocker** | Disable for this site |
+| **Privacy mode** | Try normal mode |
+| **Low Power Mode** (iOS) | May affect JavaScript |
+| **Data Saver** (Android) | May block scripts |
+| **Old browser** | Update to latest version |
+
 ### Buttons Not Working?
 
 **Try these steps:**
