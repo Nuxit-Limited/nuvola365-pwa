@@ -2,355 +2,561 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Nuvola365 Desktop</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0078d4">
+  
+  <title>Nuvola365 - Your Phone is Your Desktop</title>
+  
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   
   <!-- Loading Screen -->
   <div id="loadingScreen" class="loading-screen">
     <div class="loading-content">
-      <div class="nuvola-logo">
-        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365">
-        <div class="logo-fallback">
-          <div class="logo-n">N</div>
-        </div>
+      <div class="loading-brand">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="brand-logo" onerror="this.style.display='none';">
+        <div class="brand-name">Nuvola365</div>
       </div>
-      <div class="loading-text">Nuvola365</div>
-      <div class="loading-spinner">
-        <div class="spinner"></div>
+      <div class="loading-message">Initializing desktop workspace...</div>
+      <div class="loading-bar">
+        <div class="loading-progress"></div>
       </div>
     </div>
   </div>
 
-  <!-- Login/Signup Screen -->
-  <div id="authScreen" class="auth-screen hidden">
-    <div class="auth-container">
-      <div class="auth-logo">
-        <img id="authLogoImg" src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365">
-        <div class="logo-fallback">
-          <div class="logo-n">N</div>
-        </div>
-      </div>
-      <h1 class="auth-title">Welcome to Nuvola365</h1>
-      <p class="auth-subtitle">Your cloud workspace platform</p>
+  <!-- Welcome / Pitch Screen -->
+  <div id="welcomeScreen" class="welcome-screen hidden">
+    <div class="welcome-container">
       
-      <div class="auth-options">
-        <button class="auth-btn primary" id="signInBtn">
-          <i class="fab fa-microsoft"></i>
-          <span>Sign in with Microsoft</span>
-        </button>
-        
-        <div class="auth-divider">
-          <span>or</span>
-        </div>
-        
-        <button class="auth-btn secondary" id="signUpBtn">
-          <i class="fas fa-user-plus"></i>
-          <span>Create Account</span>
-        </button>
+      <!-- Branding -->
+      <div class="welcome-brand">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="welcome-logo" onerror="this.style.display='none';">
+        <h1>Nuvola365</h1>
       </div>
       
-      <div class="auth-footer">
-        <p>Access Windows 365, Azure Virtual Desktop, and Microsoft 365</p>
+      <!-- The Pitch -->
+      <div class="welcome-pitch">
+        <h2>Your Phone is Your Desktop</h2>
+        <p class="pitch-subtitle">Why buy laptops when your mobile can do it all?</p>
+        
+        <div class="pitch-points">
+          <div class="pitch-point">
+            <i class="fas fa-mobile-alt"></i>
+            <div>
+              <h3>One Device</h3>
+              <p>Your phone. That's it.</p>
+            </div>
+          </div>
+          
+          <div class="pitch-point">
+            <i class="fas fa-plug"></i>
+            <div>
+              <h3>Plug Into Any Display</h3>
+              <p>Monitor, TV, projector - instant desktop</p>
+            </div>
+          </div>
+          
+          <div class="pitch-point">
+            <i class="fas fa-cloud"></i>
+            <div>
+              <h3>Full Windows Desktop</h3>
+              <p>Windows 365 Cloud PC - anywhere</p>
+            </div>
+          </div>
+          
+          <div class="pitch-point">
+            <i class="fas fa-building"></i>
+            <div>
+              <h3>Business Ready</h3>
+              <p>Save thousands on hardware</p>
+            </div>
+          </div>
+        </div>
       </div>
+      
+      <!-- CTA -->
+      <div class="welcome-cta">
+        <button id="signInBtn" class="cta-btn secondary">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Sign In</span>
+        </button>
+        
+        <button id="createInstanceBtn" class="cta-btn primary">
+          <i class="fas fa-plus-circle"></i>
+          <span>Create Nuvola365 Instance</span>
+        </button>
+        
+        <p class="cta-note">Don't have an account yet? Get started in 5 minutes!</p>
+      </div>
+      
     </div>
   </div>
 
-  <!-- Desktop Container -->
+  <!-- Provisioning Form Screen -->
+  <div id="provisioningForm" class="provisioning-screen hidden">
+    <div class="provisioning-container">
+      
+      <button class="back-btn" id="backToWelcome">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back</span>
+      </button>
+      
+      <div class="provisioning-header">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="form-logo" onerror="this.style.display='none';">
+        <h2>Create Your Workspace</h2>
+        <p>Set up your Microsoft 365 cloud workspace in minutes</p>
+      </div>
+      
+      <form id="provisioningFormElement" class="provisioning-form">
+        
+        <div class="form-group">
+          <label for="orgName">
+            <i class="fas fa-building"></i>
+            Organization Name
+          </label>
+          <input 
+            type="text" 
+            id="orgName" 
+            placeholder="Acme Corporation" 
+            required
+            autocomplete="organization"
+          >
+          <span class="form-hint">Your company or organization name</span>
+        </div>
+        
+        <div class="form-group">
+          <label for="adminEmail">
+            <i class="fas fa-envelope"></i>
+            Admin Email Address
+          </label>
+          <input 
+            type="email" 
+            id="adminEmail" 
+            placeholder="admin@yourcompany.com" 
+            required
+            autocomplete="email"
+          >
+          <span class="form-hint">This will be your workspace administrator</span>
+        </div>
+        
+        <div class="form-group">
+          <label for="desiredDomain">
+            <i class="fas fa-globe"></i>
+            Desired Domain (Optional)
+          </label>
+          <div class="domain-input">
+            <input 
+              type="text" 
+              id="desiredDomain" 
+              placeholder="acme" 
+              pattern="[a-z0-9-]+"
+              autocomplete="off"
+            >
+            <span class="domain-suffix">.onmicrosoft.com</span>
+          </div>
+          <span class="form-hint">Leave blank to auto-generate</span>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-rocket"></i>
+            <span>Create Workspace</span>
+          </button>
+        </div>
+        
+        <div class="form-footer">
+          <i class="fas fa-info-circle"></i>
+          <span>Setup typically takes 3-5 minutes</span>
+        </div>
+        
+      </form>
+      
+    </div>
+  </div>
+
+  <!-- Provisioning Progress Screen -->
+  <div id="provisioningProgress" class="provisioning-screen hidden">
+    <div class="provisioning-container">
+      
+      <div class="progress-header">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="progress-logo" onerror="this.style.display='none';">
+        <h2>Setting Up Your Workspace</h2>
+        <p id="progressSubtitle">This will take a few minutes...</p>
+      </div>
+      
+      <div class="progress-main">
+        
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="mainProgressBar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          </div>
+          <div class="progress-percentage" id="progressPercentage">0%</div>
+        </div>
+        
+        <div class="current-step" id="currentStepDisplay">
+          <div class="step-icon">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+          <div class="step-text">
+            <h3 id="currentStepTitle">Initializing...</h3>
+            <p id="currentStepDescription">Preparing your workspace</p>
+          </div>
+        </div>
+        
+        <div class="steps-list" id="stepsList">
+          <!-- Steps populated dynamically -->
+        </div>
+        
+        <div class="estimated-time" id="estimatedTime">
+          <i class="fas fa-clock"></i>
+          <span>Estimated time remaining: <strong>3 minutes</strong></span>
+        </div>
+        
+      </div>
+      
+      <div class="progress-footer">
+        <button class="btn-cancel" id="cancelProvisioning">
+          <i class="fas fa-times"></i>
+          <span>Cancel Setup</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Provisioning Complete Screen -->
+  <div id="provisioningComplete" class="provisioning-screen hidden">
+    <div class="provisioning-container">
+      
+      <div class="complete-header">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>🎉 Workspace Ready!</h2>
+        <p>Your Nuvola365 workspace has been created successfully</p>
+      </div>
+      
+      <div class="complete-details">
+        
+        <div class="detail-card">
+          <div class="detail-label">
+            <i class="fas fa-globe"></i>
+            Workspace Domain
+          </div>
+          <div class="detail-value" id="completeDomain">-</div>
+          <button class="btn-copy" data-copy="completeDomain">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+        
+        <div class="detail-card">
+          <div class="detail-label">
+            <i class="fas fa-user"></i>
+            Admin Username
+          </div>
+          <div class="detail-value" id="completeUsername">-</div>
+          <button class="btn-copy" data-copy="completeUsername">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+        
+        <div class="detail-card password-card">
+          <div class="detail-label">
+            <i class="fas fa-key"></i>
+            Temporary Password
+          </div>
+          <div class="detail-value password-value" id="completePassword">
+            <span class="password-hidden">••••••••••••</span>
+            <span class="password-visible hidden">-</span>
+          </div>
+          <button class="btn-toggle-password" id="togglePassword">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="btn-copy" data-copy="completePassword">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+        
+        <div class="warning-card">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div>
+            <strong>Important:</strong> Change your password on first login for security
+          </div>
+        </div>
+        
+      </div>
+      
+      <div class="complete-actions">
+        <button class="btn-primary" id="openWorkspace">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Open Workspace</span>
+        </button>
+        
+        <button class="btn-secondary" id="emailDetails">
+          <i class="fas fa-envelope"></i>
+          <span>Email Login Details</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Provisioning Failed Screen -->
+  <div id="provisioningFailed" class="provisioning-screen hidden">
+    <div class="provisioning-container">
+      
+      <div class="failed-header">
+        <div class="error-icon">
+          <i class="fas fa-times-circle"></i>
+        </div>
+        <h2>Setup Failed</h2>
+        <p id="failedSubtitle">We encountered an issue creating your workspace</p>
+      </div>
+      
+      <div class="failed-details">
+        
+        <div class="error-card">
+          <div class="error-label">Failed at:</div>
+          <div class="error-value" id="failedStep">-</div>
+        </div>
+        
+        <div class="error-card">
+          <div class="error-label">Error:</div>
+          <div class="error-value" id="failedMessage">-</div>
+        </div>
+        
+        <div class="error-explanation" id="failedExplanation">
+          <!-- Detailed explanation populated dynamically -->
+        </div>
+        
+        <div class="reference-code">
+          <i class="fas fa-hashtag"></i>
+          <span>Reference: <strong id="failedReference">-</strong></span>
+        </div>
+        
+      </div>
+      
+      <div class="failed-actions">
+        <button class="btn-primary" id="retryProvisioning">
+          <i class="fas fa-redo"></i>
+          <span>Try Again</span>
+        </button>
+        
+        <button class="btn-secondary" id="contactSupport">
+          <i class="fas fa-life-ring"></i>
+          <span>Contact Support</span>
+        </button>
+        
+        <button class="btn-tertiary" id="backToHome">
+          <i class="fas fa-home"></i>
+          <span>Go Back</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Desktop Workspace -->
   <div id="desktop" class="desktop hidden">
     
-    <!-- Wallpaper -->
-    <div class="wallpaper"></div>
-
-    <!-- Desktop Icons -->
-    <div class="desktop-icons" id="desktopIcons">
-      <div class="desktop-icon" data-app="cloud-pc">
-        <div class="desktop-icon-img">
-          <i class="fas fa-desktop"></i>
-        </div>
-        <span>Cloud PC</span>
-      </div>
-      
-      <div class="desktop-icon" data-app="avd">
-        <div class="desktop-icon-img">
-          <i class="fas fa-cloud"></i>
-        </div>
-        <span>Azure VD</span>
-      </div>
-      
-      <div class="desktop-icon" data-app="files">
-        <div class="desktop-icon-img">
-          <i class="fas fa-folder"></i>
-        </div>
-        <span>Files</span>
-      </div>
-      
-      <div class="desktop-icon" data-app="terminal">
-        <div class="desktop-icon-img">
-          <i class="fas fa-terminal"></i>
-        </div>
-        <span>Terminal</span>
-      </div>
-      
-      <div class="desktop-icon" data-app="teams">
-        <div class="desktop-icon-img">
-          <i class="fas fa-users"></i>
-        </div>
-        <span>Teams</span>
-      </div>
-      
-      <div class="desktop-icon" data-app="outlook">
-        <div class="desktop-icon-img">
-          <i class="fas fa-envelope"></i>
-        </div>
-        <span>Outlook</span>
-      </div>
-    </div>
-
-    <!-- Windows Container -->
-    <div class="windows-container" id="windowsContainer"></div>
-
-    <!-- App Launcher (Samsung DeX Style) -->
-    <div class="app-launcher hidden" id="appLauncher">
-      <div class="launcher-header">
-        <input type="text" class="launcher-search" placeholder="Search" id="launcherSearch">
-        <button class="launcher-close" id="launcherClose">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      
-      <div class="launcher-content">
-        <!-- App Folders (Top Row) -->
-        <div class="app-folders">
-          <div class="app-folder" data-folder="work">
-            <div class="folder-icon">
-              <div class="folder-grid">
-                <i class="fas fa-briefcase"></i>
-                <i class="fas fa-file-word"></i>
-                <i class="fas fa-file-excel"></i>
-                <i class="fas fa-file-powerpoint"></i>
-              </div>
-            </div>
-            <span>Work</span>
-          </div>
-          
-          <div class="app-folder" data-folder="cloud">
-            <div class="folder-icon">
-              <div class="folder-grid">
-                <i class="fas fa-cloud"></i>
-                <i class="fas fa-desktop"></i>
-                <i class="fas fa-server"></i>
-                <i class="fas fa-database"></i>
-              </div>
-            </div>
-            <span>Cloud Apps</span>
-          </div>
-          
-          <div class="app-folder" data-folder="media">
-            <div class="folder-icon">
-              <div class="folder-grid">
-                <i class="fab fa-youtube"></i>
-                <i class="fab fa-spotify"></i>
-                <i class="fas fa-photo-video"></i>
-                <i class="fas fa-music"></i>
-              </div>
-            </div>
-            <span>Media</span>
-          </div>
-          
-          <div class="app-folder" data-folder="utilities">
-            <div class="folder-icon">
-              <div class="folder-grid">
-                <i class="fas fa-calculator"></i>
-                <i class="fas fa-terminal"></i>
-                <i class="fas fa-file-alt"></i>
-                <i class="fas fa-cog"></i>
-              </div>
-            </div>
-            <span>Utilities</span>
-          </div>
-        </div>
-
-        <!-- Individual Apps (Bottom Grid) -->
-        <div class="app-grid">
-          <!-- Cloud Workspace Apps -->
-          <div class="app-item" data-app="cloud-pc">
-            <div class="app-icon" style="background: linear-gradient(135deg, #0078d4, #00bcf2);">
-              <i class="fas fa-desktop"></i>
-            </div>
-            <span>Cloud PC</span>
-          </div>
-
-          <div class="app-item" data-app="avd">
-            <div class="app-icon" style="background: linear-gradient(135deg, #00bcf2, #0078d4);">
-              <i class="fas fa-cloud"></i>
-            </div>
-            <span>Azure VD</span>
-          </div>
-
-          <!-- Microsoft 365 -->
-          <div class="app-item" data-app="teams">
-            <div class="app-icon" style="background: #6264a7;">
-              <i class="fas fa-users"></i>
-            </div>
-            <span>Teams</span>
-          </div>
-
-          <div class="app-item" data-app="outlook">
-            <div class="app-icon" style="background: #0078d4;">
-              <i class="fas fa-envelope"></i>
-            </div>
-            <span>Outlook</span>
-          </div>
-
-          <div class="app-item" data-app="word">
-            <div class="app-icon" style="background: #2b579a;">
-              <i class="fas fa-file-word"></i>
-            </div>
-            <span>Word</span>
-          </div>
-
-          <div class="app-item" data-app="excel">
-            <div class="app-icon" style="background: #217346;">
-              <i class="fas fa-file-excel"></i>
-            </div>
-            <span>Excel</span>
-          </div>
-
-          <div class="app-item" data-app="powerpoint">
-            <div class="app-icon" style="background: #d24726;">
-              <i class="fas fa-file-powerpoint"></i>
-            </div>
-            <span>PowerPoint</span>
-          </div>
-
-          <div class="app-item" data-app="onedrive">
-            <div class="app-icon" style="background: #0078d4;">
-              <i class="fas fa-cloud-upload-alt"></i>
-            </div>
-            <span>OneDrive</span>
-          </div>
-
-          <!-- System Apps -->
-          <div class="app-item" data-app="terminal">
-            <div class="app-icon" style="background: #1e1e1e;">
-              <i class="fas fa-terminal"></i>
-            </div>
-            <span>Terminal</span>
-          </div>
-
-          <div class="app-item" data-app="files">
-            <div class="app-icon" style="background: #ffa500;">
-              <i class="fas fa-folder"></i>
-            </div>
-            <span>Files</span>
-          </div>
-
-          <div class="app-item" data-app="browser">
-            <div class="app-icon" style="background: #4285f4;">
-              <i class="fas fa-globe"></i>
-            </div>
-            <span>Browser</span>
-          </div>
-
-          <div class="app-item" data-app="settings">
-            <div class="app-icon" style="background: #607d8b;">
-              <i class="fas fa-cog"></i>
-            </div>
-            <span>Settings</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Launcher Footer -->
-      <div class="launcher-footer">
-        <button class="footer-btn" id="lockDex">
-          <i class="fas fa-lock"></i>
-          <span>Lock DeX</span>
-        </button>
-        <button class="footer-btn" id="exitDex">
-          <i class="fas fa-power-off"></i>
-          <span>Exit DeX</span>
-        </button>
-      </div>
-
-      <!-- Page Indicator -->
-      <div class="page-indicator">
-        <span class="dot active"></span>
-      </div>
-    </div>
-
-    <!-- Bottom Taskbar (Samsung DeX Style) -->
+    <!-- Taskbar -->
     <div class="taskbar">
-      <!-- Left Side - App Menu & Running Apps -->
       <div class="taskbar-left">
-        <button class="taskbar-btn app-menu-btn" id="appMenuBtn" title="Apps">
-          <i class="fas fa-th"></i>
-        </button>
-
-        <button class="taskbar-btn search-btn" title="Search">
-          <i class="fas fa-search"></i>
-        </button>
-
-        <div class="taskbar-divider"></div>
-
-        <div class="taskbar-apps" id="taskbarApps">
-          <!-- Running apps will appear here -->
+        <div class="taskbar-brand">
+          <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="taskbar-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="taskbar-logo-fallback" style="display:none;">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <span class="taskbar-brand-name">Nuvola365</span>
         </div>
       </div>
-
-      <!-- Center - Page Indicator Dot -->
+      
       <div class="taskbar-center">
-        <div class="center-indicator"></div>
+        <div class="workspace-status">Desktop Workspace</div>
       </div>
-
-      <!-- Right Side - System Tray -->
+      
       <div class="taskbar-right">
-        <button class="taskbar-btn" id="screenCapture" title="Screen capture">
-          <span class="capture-text">Screen capture</span>
-        </button>
-
-        <button class="taskbar-icon" id="notificationsBtn" title="Notifications">
-          <i class="fas fa-bell"></i>
-        </button>
-
-        <button class="taskbar-icon" id="fullscreenBtn" title="Fullscreen">
-          <i class="fas fa-expand"></i>
-        </button>
-
-        <button class="taskbar-icon" id="helpBtn" title="Help">
-          <i class="fas fa-question-circle"></i>
-        </button>
-
-        <div class="taskbar-divider"></div>
-
+        <div class="system-tray">
+          <button class="tray-btn" title="Connection Status">
+            <i class="fas fa-wifi"></i>
+          </button>
+          <button class="tray-btn" title="Battery">
+            <i class="fas fa-battery-three-quarters"></i>
+          </button>
+        </div>
         <div class="taskbar-clock" id="taskbarClock">
-          <div class="clock-time">6:01 PM</div>
-          <div class="clock-date">Fri, 3/10</div>
+          <div class="clock-time">12:00 PM</div>
+          <div class="clock-date">Mon, Jan 1</div>
         </div>
-
-        <div class="taskbar-battery">
-          <span class="battery-percent">Online</span>
-          <i class="fas fa-wifi"></i>
-        </div>
+        <button class="tray-btn menu-btn" id="menuBtn" title="Menu">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
       </div>
     </div>
 
-    <!-- Context Menu -->
-    <div class="context-menu hidden" id="contextMenu"></div>
+    <!-- Main Desktop Area -->
+    <div class="desktop-workspace">
+      
+      <!-- Hero Message -->
+      <div class="desktop-hero">
+        <h1>Connect to Your Cloud Desktop</h1>
+        <p>Choose your workspace below</p>
+      </div>
+      
+      <!-- The 3 Essential Portals -->
+      <div class="portal-grid">
+        
+        <!-- Windows 365 Cloud PC -->
+        <div class="portal-card" data-portal="windows365">
+          <div class="portal-icon">
+            <i class="fab fa-windows"></i>
+          </div>
+          <div class="portal-content">
+            <h2>Windows 365 Cloud PC</h2>
+            <p>Your full Windows desktop in the cloud</p>
+            <div class="portal-features">
+              <span><i class="fas fa-check"></i> Full Windows 11</span>
+              <span><i class="fas fa-check"></i> All your apps</span>
+              <span><i class="fas fa-check"></i> Your files</span>
+            </div>
+          </div>
+          <button class="portal-btn">
+            <span>Launch Desktop</span>
+            <i class="fas fa-external-link-alt"></i>
+          </button>
+        </div>
+
+        <!-- Azure Virtual Desktop -->
+        <div class="portal-card" data-portal="avd">
+          <div class="portal-icon">
+            <i class="fas fa-server"></i>
+          </div>
+          <div class="portal-content">
+            <h2>Azure Virtual Desktop</h2>
+            <p>Enterprise apps and remote desktops</p>
+            <div class="portal-features">
+              <span><i class="fas fa-check"></i> Business apps</span>
+              <span><i class="fas fa-check"></i> Secure access</span>
+              <span><i class="fas fa-check"></i> Multi-session</span>
+            </div>
+          </div>
+          <button class="portal-btn">
+            <span>Launch AVD</span>
+            <i class="fas fa-external-link-alt"></i>
+          </button>
+        </div>
+
+        <!-- Microsoft 365 Portal -->
+        <div class="portal-card" data-portal="office365">
+          <div class="portal-icon">
+            <i class="fas fa-th"></i>
+          </div>
+          <div class="portal-content">
+            <h2>Microsoft 365</h2>
+            <p>All your Office apps in one place</p>
+            <div class="portal-features">
+              <span><i class="fas fa-check"></i> Word, Excel, PowerPoint</span>
+              <span><i class="fas fa-check"></i> Teams, Outlook, OneDrive</span>
+              <span><i class="fas fa-check"></i> All apps included</span>
+            </div>
+          </div>
+          <button class="portal-btn">
+            <span>Open Portal</span>
+            <i class="fas fa-external-link-alt"></i>
+          </button>
+        </div>
+
+      </div>
+      
+      <!-- Value Proposition Footer -->
+      <div class="desktop-footer">
+        <div class="value-prop">
+          <i class="fas fa-lightbulb"></i>
+          <div>
+            <strong>Business Savings:</strong> No laptops, no desktops, no tablets. 
+            Just your phone + Nuvola365 = Full desktop workspace anywhere.
+          </div>
+        </div>
+      </div>
+      
+    </div>
 
   </div>
 
-  <script src="filesystem.js"></script>
+  <!-- Quick Menu -->
+  <div id="quickMenu" class="quick-menu hidden">
+    <div class="menu-header">
+      <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="menu-logo" onerror="this.style.display='none';">
+      <span>Nuvola365</span>
+    </div>
+    <div class="menu-items">
+      <button class="menu-item" id="aboutBtn">
+        <i class="fas fa-info-circle"></i>
+        <span>About Nuvola365</span>
+      </button>
+      <button class="menu-item" id="helpBtn">
+        <i class="fas fa-question-circle"></i>
+        <span>Help & Support</span>
+      </button>
+      <div class="menu-divider"></div>
+      <button class="menu-item" id="disconnectBtn">
+        <i class="fas fa-plug"></i>
+        <span>Disconnect Display</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="aboutModal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="closeAbout">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="modal-brand">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="modal-logo" onerror="this.style.display='none';">
+        <h2>Nuvola365</h2>
+      </div>
+      <div class="modal-body">
+        <h3>Your Phone is Your Desktop</h3>
+        <p>Nuvola365 transforms any mobile device into a full desktop workspace. Just plug into a display and you're ready to work.</p>
+        
+        <div class="modal-section">
+          <h4>Why Nuvola365?</h4>
+          <ul>
+            <li><strong>Universal:</strong> Works on any phone - iOS or Android</li>
+            <li><strong>Cost Effective:</strong> No laptops or desktops needed</li>
+            <li><strong>Anywhere:</strong> Your desktop follows you</li>
+            <li><strong>Business Ready:</strong> Enterprise security & management</li>
+          </ul>
+        </div>
+        
+        <div class="modal-section">
+          <h4>How It Works</h4>
+          <ol>
+            <li>Open Nuvola365 on your phone</li>
+            <li>Connect to any display (HDMI, wireless, USB-C)</li>
+            <li>Access your Cloud PC or Microsoft 365</li>
+            <li>Work on a full desktop interface</li>
+          </ol>
+        </div>
+        
+        <p class="modal-footer">Powered by Windows 365 & Azure Virtual Desktop</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <script src="config.js"></script>
   <script src="apps.js"></script>
   <script src="system.js"></script>
+
 </body>
 </html>

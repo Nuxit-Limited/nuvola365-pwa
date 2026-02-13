@@ -1,20 +1,23 @@
 {
-  "name": "Nuvola365 Desktop",
+  "name": "Nuvola365 - Your Phone is Your Desktop",
   "short_name": "Nuvola365",
-  "description": "Samsung DeX-style cloud workspace for Windows 365 & Azure Virtual Desktop",
+  "description": "Transform your mobile device into a desktop workspace. Universal desktop mode for all phones.",
   "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "orientation": "any",
+  "display": "fullscreen",
   "background_color": "#1a1a1a",
   "theme_color": "#0078d4",
-  "categories": ["productivity", "business", "utilities"],
+  "orientation": "any",
   "icons": [
     {
       "src": "https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
+    },
+    {
+      "src": "https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ]
+  ],
+  "categories": ["productivity", "business"]
 }
