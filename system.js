@@ -21,6 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function bootSystem() {
+  // Handle logo fallback
+  const authLogo = document.getElementById('authLogoImg');
+  if (authLogo) {
+    authLogo.onerror = function() {
+      console.log('Logo failed to load, showing fallback');
+      this.style.display = 'none';
+      const fallback = this.nextElementSibling;
+      if (fallback && fallback.classList.contains('logo-fallback')) {
+        fallback.style.display = 'flex';
+      }
+    };
+    
+    // Also check if image loads successfully
+    authLogo.onload = function() {
+      console.log('Logo loaded successfully');
+    };
+  }
+  
   // Simulate loading
   setTimeout(() => {
     document.getElementById('loadingScreen').classList.add('hidden');
@@ -526,7 +544,7 @@ function openApp(appId, options = {}) {
     return;
   }
   
-  // Cloud apps - open embedded in iframe instead of new tab
+  // Cloud apps - open in popup window (separate browser window)
   if (app.isCloudApp && app.openInTab) {
     let launchUrl = app.url;
     
@@ -538,11 +556,19 @@ function openApp(appId, options = {}) {
       launchUrl = window.CloudConfig.avd.getLaunchUrl();
       showNotification(app.name, 'Launching AVD resource directly...');
     } else {
-      showNotification(app.name, 'Opening embedded...');
+      showNotification(app.name, 'Opening in popup window...');
     }
     
-    // Create embedded iframe window instead of opening new tab
-    createEmbeddedWindow(app.name, launchUrl, app.icon);
+    // Open in popup window with specific dimensions
+    const width = Math.min(1400, screen.width - 100);
+    const height = Math.min(900, screen.height - 100);
+    const left = Math.max(0, (screen.width - width) / 2);
+    const top = Math.max(0, (screen.height - height) / 2);
+    
+    const windowFeatures = `width=${width},height=${height},left=${left},top=${top},` +
+                          `toolbar=no,menubar=no,location=no,status=no,resizable=yes,scrollbars=yes`;
+    
+    window.open(launchUrl, app.name, windowFeatures);
     return;
   }
   

@@ -1,6 +1,6 @@
 /* ============================================
    NUVOLA365 - Samsung DeX Style
-   Complete Edition with Auth & Desktop Icons
+   Complete with Responsive Scaling
    ============================================ */
 
 * {
@@ -75,17 +75,25 @@ body {
   object-fit: contain;
   border-radius: 20px;
   animation: pulse 2s ease-in-out infinite;
+  display: block;
 }
 
-.logo-fallback {
+.nuvola-logo .logo-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 120px;
   height: 120px;
   background: linear-gradient(135deg, var(--nuvola-blue), var(--nuvola-light));
   border-radius: 20px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 40px rgba(0, 120, 212, 0.5);
+}
+
+.nuvola-logo img[style*="display: none"] + .logo-fallback {
+  display: flex !important;
 }
 
 .logo-n {
@@ -166,6 +174,26 @@ body {
   height: 100%;
   object-fit: contain;
   border-radius: 16px;
+  display: block;
+}
+
+.auth-logo img[style*="display: none"] + .logo-fallback,
+.auth-logo img:not([src]) + .logo-fallback {
+  display: flex !important;
+}
+
+.auth-logo .logo-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--nuvola-blue), var(--nuvola-light));
+  border-radius: 20px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(0, 120, 212, 0.5);
 }
 
 .auth-title {
@@ -353,29 +381,12 @@ body {
 }
 
 /* Desktop icon color variations */
-.desktop-icon[data-app="cloud-pc"] .desktop-icon-img {
-  color: #0078d4;
-}
-
-.desktop-icon[data-app="avd"] .desktop-icon-img {
-  color: #00bcf2;
-}
-
-.desktop-icon[data-app="files"] .desktop-icon-img {
-  color: #ffa500;
-}
-
-.desktop-icon[data-app="terminal"] .desktop-icon-img {
-  color: #4caf50;
-}
-
-.desktop-icon[data-app="teams"] .desktop-icon-img {
-  color: #6264a7;
-}
-
-.desktop-icon[data-app="outlook"] .desktop-icon-img {
-  color: #0078d4;
-}
+.desktop-icon[data-app="cloud-pc"] .desktop-icon-img { color: #0078d4; }
+.desktop-icon[data-app="avd"] .desktop-icon-img { color: #00bcf2; }
+.desktop-icon[data-app="files"] .desktop-icon-img { color: #ffa500; }
+.desktop-icon[data-app="terminal"] .desktop-icon-img { color: #4caf50; }
+.desktop-icon[data-app="teams"] .desktop-icon-img { color: #6264a7; }
+.desktop-icon[data-app="outlook"] .desktop-icon-img { color: #0078d4; }
 
 .windows-container {
   position: absolute;
@@ -398,6 +409,10 @@ body {
   flex-direction: column;
   pointer-events: auto;
   transition: opacity var(--transition);
+  min-width: 300px;
+  min-height: 200px;
+  max-width: 95vw;
+  max-height: calc(95vh - var(--taskbar-height));
 }
 
 .window.minimized {
@@ -411,6 +426,8 @@ body {
   width: 100% !important;
   height: calc(100vh - var(--taskbar-height)) !important;
   border-radius: 0;
+  max-width: 100vw !important;
+  max-height: calc(100vh - var(--taskbar-height)) !important;
 }
 
 .window-titlebar {
@@ -1151,6 +1168,38 @@ body {
 /* ============================================
    RESPONSIVE
    ============================================ */
+
+/* Tablets and smaller desktops */
+@media (max-width: 1024px) {
+  .app-folders,
+  .app-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 24px;
+  }
+  
+  .folder-icon,
+  .app-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .desktop-icons {
+    grid-template-columns: 90px;
+    gap: 20px;
+  }
+  
+  .desktop-icon-img {
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+  }
+  
+  .window {
+    max-width: 95vw;
+  }
+}
+
+/* Mobile phones and small tablets */
 @media (max-width: 768px) {
   .app-folders,
   .app-grid {
@@ -1175,11 +1224,172 @@ body {
   .desktop-icons {
     grid-template-columns: 80px;
     gap: 16px;
+    top: 16px;
+    left: 16px;
   }
   
   .desktop-icon-img {
     width: 56px;
     height: 56px;
     font-size: 28px;
+  }
+  
+  .desktop-icon span {
+    font-size: 0.75rem;
+  }
+  
+  .auth-container {
+    max-width: 90vw;
+    padding: 24px;
+  }
+  
+  .auth-title {
+    font-size: 1.5rem;
+  }
+  
+  .window {
+    max-width: 100vw !important;
+    max-height: calc(100vh - var(--taskbar-height)) !important;
+  }
+  
+  .window:not(.maximized) {
+    width: 95vw !important;
+    height: calc(90vh - var(--taskbar-height)) !important;
+    left: 2.5vw !important;
+    top: 20px !important;
+  }
+  
+  .taskbar-right {
+    gap: 4px;
+  }
+  
+  .taskbar-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+  .desktop-icons {
+    grid-template-columns: 70px;
+    gap: 12px;
+    top: 12px;
+    left: 12px;
+  }
+  
+  .desktop-icon-img {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+  
+  .app-folders {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .app-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .taskbar {
+    padding: 0 8px;
+  }
+  
+  .taskbar-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .auth-logo {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .auth-logo .logo-fallback {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .logo-n {
+    font-size: 48px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+  .desktop-icons {
+    top: 8px;
+    gap: 12px;
+  }
+  
+  .desktop-icon-img {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+  
+  .auth-container {
+    padding: 20px;
+    max-width: 400px;
+  }
+  
+  .auth-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 16px;
+  }
+  
+  .auth-logo .logo-fallback {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .logo-n {
+    font-size: 36px;
+  }
+  
+  .auth-title {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+  }
+  
+  .auth-subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 16px;
+  }
+}
+
+/* Large screens - optimize spacing */
+@media (min-width: 1920px) {
+  .app-folders,
+  .app-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 140px));
+    gap: 40px;
+  }
+  
+  .desktop-icons {
+    grid-template-columns: 110px;
+    gap: 28px;
+  }
+  
+  .desktop-icon-img {
+    width: 80px;
+    height: 80px;
+    font-size: 40px;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 2560px) {
+  .app-folders,
+  .app-grid {
+    max-width: 2000px;
+    margin: 0 auto;
+  }
+  
+  .auth-container {
+    max-width: 500px;
   }
 }
