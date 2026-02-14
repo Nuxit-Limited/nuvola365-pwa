@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuvola365 - MSP Cloud Management Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LANDING PAGE (Unauthenticated) -->
+  <div id="landingPage" class="page">
+    <nav class="landing-nav">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="nav-logo" onerror="this.style.display='none';">
+          <span class="nav-brand-name">Nuvola365</span>
+        </div>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <button class="btn-nav-login" id="navLoginBtn">Sign In</button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-container">
+        <h1>Your Phone is Your Desktop.<br>Your Tablet is Your Laptop.</h1>
+        <p class="hero-subtitle">Stop buying expensive laptops and desktops. Nuvola365 transforms your existing phones and tablets into full Windows workstations — saving businesses thousands.</p>
+        
+        <div class="hero-cta">
+          <button class="btn-primary btn-large" id="heroSignInBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Sign In</span>
+          </button>
+          
+          <button class="btn-secondary btn-large" id="heroCreateBtn">
+            <i class="fas fa-plus-circle"></i>
+            <span>Create Nuvola365 Instance</span>
+          </button>
+        </div>
+        
+        <p class="hero-note">💰 Average savings: £800+ per employee | No hardware to buy, maintain, or replace</p>
+      </div>
+    </section>
+
+    <section class="comparison" id="pricing">
+      <div class="comparison-container">
+        <h2>The Numbers Don't Lie</h2>
+        <p class="comparison-subtitle">Traditional IT vs. Nuvola365 — See why businesses are switching</p>
+        
+        <div class="comparison-grid">
+          <div class="comparison-card old-way">
+            <div class="comparison-header">
+              <i class="fas fa-laptop"></i>
+              <h3>The Old Way</h3>
+              <p>Buying laptops for everyone</p>
+            </div>
+            <div class="comparison-price bad">
+              <span class="price-amount">£800+</span>
+              <span class="price-period">per employee upfront</span>
+            </div>
+            <ul class="comparison-features">
+              <li class="con"><i class="fas fa-times"></i> £800-1,200 per laptop</li>
+              <li class="con"><i class="fas fa-times"></i> Obsolete in 3 years</li>
+              <li class="con"><i class="fas fa-times"></i> Hardware failures</li>
+              <li class="con"><i class="fas fa-times"></i> Lost/stolen devices = lost data</li>
+              <li class="con"><i class="fas fa-times"></i> 2-4 week replacement time</li>
+              <li class="con"><i class="fas fa-times"></i> IT support costs</li>
+              <li class="con"><i class="fas fa-times"></i> Manual backups</li>
+            </ul>
+            <div class="comparison-total">
+              <strong>3-Year Cost: £1,200+</strong>
+              <span>Plus IT support and replacements</span>
+            </div>
+          </div>
+
+          <div class="comparison-card new-way featured">
+            <div class="comparison-badge">Recommended</div>
+            <div class="comparison-header">
+              <i class="fas fa-mobile-alt"></i>
+              <h3>The Nuvola365 Way</h3>
+              <p>Transform existing devices</p>
+            </div>
+            <div class="comparison-price good">
+              <span class="price-amount">£25</span>
+              <span class="price-period">per employee/month</span>
+            </div>
+            <ul class="comparison-features">
+              <li class="pro"><i class="fas fa-check"></i> Use existing phones/tablets</li>
+              <li class="pro"><i class="fas fa-check"></i> Always latest Windows 11</li>
+              <li class="pro"><i class="fas fa-check"></i> No hardware to maintain</li>
+              <li class="pro"><i class="fas fa-check"></i> Data always in the cloud</li>
+              <li class="pro"><i class="fas fa-check"></i> 5-minute device replacement</li>
+              <li class="pro"><i class="fas fa-check"></i> Fully managed service</li>
+              <li class="pro"><i class="fas fa-check"></i> Automatic backups</li>
+            </ul>
+            <div class="comparison-total">
+              <strong>3-Year Cost: £900</strong>
+              <span>Everything included, fully managed</span>
+            </div>
+            <div class="savings-badge">
+              <i class="fas fa-piggy-bank"></i>
+              <span>Save £300+ per employee over 3 years</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roi-calculator">
+          <h3>💰 Your Potential Savings</h3>
+          <div class="roi-inputs">
+            <label>
+              Number of employees:
+              <input type="number" id="roiEmployees" value="10" min="1" max="1000">
+            </label>
+            <div class="roi-result">
+              <div class="roi-item">
+                <span>Traditional IT Cost (3 years):</span>
+                <strong class="old-cost">£12,000</strong>
+              </div>
+              <div class="roi-item">
+                <span>Nuvola365 Cost (3 years):</span>
+                <strong class="new-cost">£9,000</strong>
+              </div>
+              <div class="roi-savings">
+                <span>Your Savings:</span>
+                <strong class="savings-amount">£3,000</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="features-container">
+        <h2>Why Pay for Laptops When You Don't Have To?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>One Device Does It All</h3>
+            <p>Your employee's phone becomes their desktop, laptop, and tablet. Plug into any monitor and work like a PC. Unplug and take it anywhere.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-piggy-bank"></i>
+            <h3>Massive Cost Savings</h3>
+            <p>Stop buying £800+ laptops for every employee. A £25/month Cloud PC beats a £800 laptop that's obsolete in 3 years. Do the math.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-cloud"></i>
+            <h3>Full Windows Desktop</h3>
+            <p>Not a compromise. Real Windows 11, real Office apps, real business software. Your team gets the full desktop experience on any screen.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Enterprise Security Included</h3>
+            <p>Bank-level encryption, multi-factor authentication, automatic backups, and compliance built in. Better security than any laptop.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-sync-alt"></i>
+            <h3>Instant Replacement</h3>
+            <p>Phone breaks? No problem. New phone, same desktop in 5 minutes. No data loss, no IT headaches, no lost productivity.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Scale Without Limits</h3>
+            <p>Hire 10 new employees? Just add 10 licenses. No ordering, no shipping, no setup time. They're working in minutes, not weeks.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div id="loginModal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="closeLogin"><i class="fas fa-times"></i></button>
+      <div class="modal-header">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="modal-logo" onerror="this.style.display='none';">
+        <h2>Sign In</h2>
+        <p>Welcome back to Nuvola365</p>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="admin@yourcompany.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-primary btn-block">Sign In</button>
+        <p class="form-footer">Don't have an account? <a href="#" id="showSignup">Create one</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (Authenticated) -->
+  <div id="dashboard" class="page hidden">
+    
+    <!-- Top Navigation -->
+    <nav class="dashboard-nav">
+      <div class="nav-container">
+        <div class="nav-brand">
+          <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="nav-logo" onerror="this.style.display='none';">
+          <span class="nav-brand-name">Nuvola365</span>
+        </div>
+        <div class="nav-menu">
+          <button class="nav-item active" data-view="home">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" data-view="subscriptions">
+            <i class="fas fa-box"></i>
+            <span>Subscriptions</span>
+          </button>
+          <button class="nav-item" data-view="users">
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+          </button>
+          <button class="nav-item" data-view="store">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Store</span>
+          </button>
+          <button class="nav-item" data-view="billing">
+            <i class="fas fa-credit-card"></i>
+            <span>Billing</span>
+          </button>
+        </div>
+        <div class="nav-user">
+          <button class="user-menu-btn" id="userMenuBtn">
+            <div class="user-avatar">JS</div>
+            <span id="userName">John Smith</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="user-dropdown hidden" id="userDropdown">
+            <div class="dropdown-header">
+              <div class="dropdown-org" id="orgName">Acme Corporation</div>
+              <div class="dropdown-email" id="userEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="43292c2b2d0322202e266d202c2e">[email&#160;protected]</a></div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item"><i class="fas fa-cog"></i> Settings</button>
+            <button class="dropdown-item" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+      
+      <!-- HOME VIEW -->
+      <div id="homeView" class="view active">
+        <div class="view-header">
+          <h1>Dashboard</h1>
+          <p>Welcome back, <span id="welcomeName">John Smith</span></p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue">
+              <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Active Subscriptions</div>
+              <div class="stat-value" id="statSubscriptions">3</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Total Users</div>
+              <div class="stat-value" id="statUsers">25</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon purple">
+              <i class="fas fa-pound-sign"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Monthly Cost</div>
+              <div class="stat-value" id="statCost">£1,250</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Quick Launch</h2>
+          <div class="quick-launch-grid">
+            <button class="quick-launch-card">
+              <div class="qlaunch-icon"><i class="fas fa-th"></i></div>
+              <div class="qlaunch-content">
+                <h3>Microsoft 365</h3>
+                <p>Access all Office apps</p>
+              </div>
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            <button class="quick-launch-card">
+              <div class="qlaunch-icon"><i class="fab fa-windows"></i></div>
+              <div class="qlaunch-content">
+                <h3>Windows 365</h3>
+                <p>Your Cloud PC</p>
+              </div>
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            <button class="quick-launch-card">
+              <div class="qlaunch-icon"><i class="fas fa-server"></i></div>
+              <div class="qlaunch-content">
+                <h3>Azure Virtual Desktop</h3>
+                <p>Remote applications</p>
+              </div>
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Your Subscriptions</h2>
+          <div id="homeSubscriptionsList" class="subscription-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTIONS VIEW -->
+      <div id="subscriptionsView" class="view">
+        <div class="view-header">
+          <h1>Subscriptions</h1>
+          <button class="btn-primary" id="addSubscriptionBtn">
+            <i class="fas fa-plus"></i>
+            Add Subscription
+          </button>
+        </div>
+        <div id="subscriptionsList" class="subscription-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- USERS VIEW -->
+      <div id="usersView" class="view">
+        <div class="view-header">
+          <h1>Users</h1>
+          <button class="btn-primary" id="addUserBtn">
+            <i class="fas fa-user-plus"></i>
+            Add User
+          </button>
+        </div>
+        <div class="users-table-container">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Licenses</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STORE VIEW -->
+      <div id="storeView" class="view">
+        <div class="view-header">
+          <h1>Store</h1>
+          <button class="btn-primary" id="viewCartBtn">
+            <i class="fas fa-shopping-cart"></i>
+            Cart (<span id="cartCount">0</span>)
+          </button>
+        </div>
+
+        <div class="store-categories">
+          <button class="category-btn active" data-category="all">All Products</button>
+          <button class="category-btn" data-category="m365">Microsoft 365</button>
+          <button class="category-btn" data-category="w365">Windows 365</button>
+          <button class="category-btn" data-category="avd">Azure VD</button>
+          <button class="category-btn" data-category="bundles">Bundles</button>
+          <button class="category-btn" data-category="hardware">Hardware</button>
+        </div>
+
+        <div id="storeProducts" class="store-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- BILLING VIEW -->
+      <div id="billingView" class="view">
+        <div class="view-header">
+          <h1>Billing</h1>
+        </div>
+
+        <div class="billing-summary">
+          <div class="billing-card">
+            <h3>Current Period</h3>
+            <div class="billing-amount">£1,250.00</div>
+            <p>Next billing: March 1, 2024</p>
+          </div>
+          <div class="billing-card">
+            <h3>Payment Method</h3>
+            <div class="payment-method">
+              <i class="fab fa-cc-visa"></i>
+              <span>•••• 4242</span>
+            </div>
+            <button class="btn-link">Update</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Recent Invoices</h2>
+          <div class="invoices-table-container">
+            <table class="invoices-table">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invoicesTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SIGNUP FLOW (Reuse provisioning form from PWA) -->
+  <div id="signupFlow" class="page hidden">
+    <div class="signup-container">
+      <button class="back-btn" id="backToLanding">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back</span>
+      </button>
+      
+      <div class="signup-header">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="signup-logo" onerror="this.style.display='none';">
+        <h2>Create Your Nuvola365 Instance</h2>
+        <p>Get started with Microsoft 365 and Windows 365</p>
+      </div>
+      
+      <form id="signupForm" class="signup-form">
+        <!-- Organization -->
+        <div class="form-section">
+          <h3><i class="fas fa-building"></i> Organization Details</h3>
+          <div class="form-group">
+            <label>Organization Name <span class="required">*</span></label>
+            <input type="text" id="signupOrgName" required>
+          </div>
+          <div class="form-group">
+            <label>Desired Domain <span class="required">*</span></label>
+            <div class="domain-input">
+              <input type="text" id="signupDomain" pattern="[a-z0-9-]+" required>
+              <span class="domain-suffix">.onmicrosoft.com</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin -->
+        <div class="form-section">
+          <h3><i class="fas fa-user-shield"></i> Administrator</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name <span class="required">*</span></label>
+              <input type="text" id="signupFirstName" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name <span class="required">*</span></label>
+              <input type="text" id="signupLastName" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email <span class="required">*</span></label>
+            <input type="email" id="signupEmail" required>
+          </div>
+          <div class="form-group">
+            <label>Password <span class="required">*</span></label>
+            <input type="password" id="signupPassword" minlength="8" required>
+          </div>
+        </div>
+
+        <!-- Starter Package -->
+        <div class="form-section">
+          <h3><i class="fas fa-box"></i> Select Starter Package</h3>
+          <div class="package-selection">
+            <label class="package-card">
+              <input type="radio" name="package" value="basic" checked>
+              <div class="package-content">
+                <h4>Essential</h4>
+                <div class="package-price">£4.20<span>/user/month</span></div>
+                <ul>
+                  <li>Microsoft 365 Business Basic</li>
+                  <li>Web and mobile apps</li>
+                  <li>1TB OneDrive storage</li>
+                </ul>
+              </div>
+            </label>
+            <label class="package-card featured">
+              <input type="radio" name="package" value="premium">
+              <div class="package-badge">Most Popular</div>
+              <div class="package-content">
+                <h4>Complete</h4>
+                <div class="package-price">£15.60<span>/user/month</span></div>
+                <ul>
+                  <li>Microsoft 365 Business Premium</li>
+                  <li>Desktop Office apps</li>
+                  <li>Advanced security</li>
+                  <li>Device management</li>
+                </ul>
+              </div>
+            </label>
+            <label class="package-card">
+              <input type="radio" name="package" value="workspace">
+              <div class="package-content">
+                <h4>Full Workspace</h4>
+                <div class="package-price">£39.60<span>/user/month</span></div>
+                <ul>
+                  <li>M365 Business Premium</li>
+                  <li>Windows 365 Business (2vCPU/4GB)</li>
+                  <li>Full cloud desktop</li>
+                </ul>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- User Count -->
+        <div class="form-section">
+          <h3><i class="fas fa-users"></i> Number of Users</h3>
+          <div class="form-group">
+            <label>How many users? <span class="required">*</span></label>
+            <input type="number" id="signupUserCount" min="1" max="300" value="5" required>
+            <div class="cost-preview" id="costPreview">
+              Estimated monthly cost: <strong>£78.00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary btn-large btn-block">
+            <i class="fas fa-rocket"></i>
+            Create Instance
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PROVISIONING PROGRESS (Reuse from PWA) -->
+  <div id="provisioningProgress" class="page hidden">
+    <div class="progress-container">
+      <div class="progress-header">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="progress-logo" onerror="this.style.display='none';">
+        <h2>Setting Up Your Workspace</h2>
+        <p>Please wait while we provision your cloud environment...</p>
+      </div>
+      
+      <div class="progress-main">
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-percentage" id="progressPercentage">0%</div>
+        </div>
+        
+        <div class="current-step">
+          <div class="step-icon"><i class="fas fa-spinner fa-spin"></i></div>
+          <div class="step-text">
+            <h3 id="currentStepTitle">Initializing...</h3>
+            <p id="currentStepDesc">Preparing your workspace</p>
+          </div>
+        </div>
+        
+        <div class="steps-list" id="stepsList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div
