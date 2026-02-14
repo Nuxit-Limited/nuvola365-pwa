@@ -82,17 +82,17 @@
       
       <!-- CTA -->
       <div class="welcome-cta">
-        <button id="signInBtn" class="cta-btn secondary">
+        <button id="signInBtn" class="cta-btn primary">
           <i class="fas fa-sign-in-alt"></i>
           <span>Sign In</span>
         </button>
         
-        <button id="createInstanceBtn" class="cta-btn primary">
+        <button id="createInstanceBtn" class="cta-btn secondary">
           <i class="fas fa-plus-circle"></i>
           <span>Create Nuvola365 Instance</span>
         </button>
         
-        <p class="cta-note">Don't have an account yet? Get started in 5 minutes!</p>
+        <p class="cta-note">New to Nuvola365? Create an instance to get started</p>
       </div>
       
     </div>
@@ -110,57 +110,318 @@
       <div class="provisioning-header">
         <img src="https://media.licdn.com/dms/image/v2/D4E0BAQGIcoIGtUp-2w/img-crop_100/B4EZxH5TrZGoAQ-/0/1770732731804?e=1772668800&v=beta&t=l0QvMtwZL3ZxfXy0SCWM6kHPq2JZjN6qnfR2ft0NpYg" alt="Nuvola365" class="form-logo" onerror="this.style.display='none';">
         <h2>Create Your Workspace</h2>
-        <p>Set up your Microsoft 365 cloud workspace in minutes</p>
+        <p>Complete your details to set up your Microsoft 365 cloud workspace</p>
       </div>
       
       <form id="provisioningFormElement" class="provisioning-form">
         
-        <div class="form-group">
-          <label for="orgName">
+        <!-- Organization Details Section -->
+        <div class="form-section">
+          <h3 class="form-section-title">
             <i class="fas fa-building"></i>
-            Organization Name
-          </label>
-          <input 
-            type="text" 
-            id="orgName" 
-            placeholder="Acme Corporation" 
-            required
-            autocomplete="organization"
-          >
-          <span class="form-hint">Your company or organization name</span>
-        </div>
-        
-        <div class="form-group">
-          <label for="adminEmail">
-            <i class="fas fa-envelope"></i>
-            Admin Email Address
-          </label>
-          <input 
-            type="email" 
-            id="adminEmail" 
-            placeholder="admin@yourcompany.com" 
-            required
-            autocomplete="email"
-          >
-          <span class="form-hint">This will be your workspace administrator</span>
-        </div>
-        
-        <div class="form-group">
-          <label for="desiredDomain">
-            <i class="fas fa-globe"></i>
-            Desired Domain (Optional)
-          </label>
-          <div class="domain-input">
+            Organization Details
+          </h3>
+          
+          <div class="form-group">
+            <label for="orgName">
+              Organization Name <span class="required">*</span>
+            </label>
             <input 
               type="text" 
-              id="desiredDomain" 
-              placeholder="acme" 
-              pattern="[a-z0-9-]+"
-              autocomplete="off"
+              id="orgName" 
+              placeholder="Acme Corporation" 
+              required
+              autocomplete="organization"
             >
-            <span class="domain-suffix">.onmicrosoft.com</span>
+            <span class="form-hint">Your company or organization name</span>
           </div>
-          <span class="form-hint">Leave blank to auto-generate</span>
+          
+          <div class="form-group">
+            <label for="desiredDomain">
+              Desired Domain <span class="required">*</span>
+            </label>
+            <div class="domain-input">
+              <input 
+                type="text" 
+                id="desiredDomain" 
+                placeholder="acme" 
+                pattern="[a-z0-9-]+"
+                required
+                autocomplete="off"
+              >
+              <span class="domain-suffix">.onmicrosoft.com</span>
+            </div>
+            <span class="form-hint">This will be your workspace domain (lowercase letters, numbers, hyphens only)</span>
+          </div>
+        </div>
+        
+        <!-- Admin Contact Section -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <i class="fas fa-user-shield"></i>
+            Administrator Contact
+          </h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="adminFirstName">
+                First Name <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="adminFirstName" 
+                placeholder="John" 
+                required
+                autocomplete="given-name"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="adminLastName">
+                Last Name <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="adminLastName" 
+                placeholder="Smith" 
+                required
+                autocomplete="family-name"
+              >
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="adminEmail">
+              Email Address <span class="required">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="adminEmail" 
+              placeholder="admin@yourcompany.com" 
+              required
+              autocomplete="email"
+            >
+            <span class="form-hint">This will be used to create your administrator account</span>
+          </div>
+          
+          <div class="form-group">
+            <label for="adminPhone">
+              Phone Number <span class="required">*</span>
+            </label>
+            <input 
+              type="tel" 
+              id="adminPhone" 
+              placeholder="+44 20 1234 5678" 
+              required
+              autocomplete="tel"
+            >
+          </div>
+        </div>
+        
+        <!-- Billing Address Section -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <i class="fas fa-map-marker-alt"></i>
+            Billing Address
+          </h3>
+          
+          <div class="form-group">
+            <label for="addressLine1">
+              Address Line 1 <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="addressLine1" 
+              placeholder="123 High Street" 
+              required
+              autocomplete="address-line1"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="addressLine2">
+              Address Line 2
+            </label>
+            <input 
+              type="text" 
+              id="addressLine2" 
+              placeholder="Suite 100" 
+              autocomplete="address-line2"
+            >
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">
+                City <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="city" 
+                placeholder="London" 
+                required
+                autocomplete="address-level2"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="postalCode">
+                Postal Code <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="postalCode" 
+                placeholder="SW1A 1AA" 
+                required
+                autocomplete="postal-code"
+              >
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="country">
+              Country <span class="required">*</span>
+            </label>
+            <select id="country" required autocomplete="country">
+              <option value="">Select Country</option>
+              <option value="GB">United Kingdom</option>
+              <option value="US">United States</option>
+              <option value="IE">Ireland</option>
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+              <option value="ES">Spain</option>
+              <option value="IT">Italy</option>
+              <option value="NL">Netherlands</option>
+              <option value="BE">Belgium</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="NZ">New Zealand</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Payment Information Section -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <i class="fas fa-credit-card"></i>
+            Payment Information
+          </h3>
+          
+          <div class="form-group">
+            <label for="cardholderName">
+              Cardholder Name <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="cardholderName" 
+              placeholder="John Smith" 
+              required
+              autocomplete="cc-name"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="cardNumber">
+              Card Number <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="cardNumber" 
+              placeholder="1234 5678 9012 3456" 
+              required
+              autocomplete="cc-number"
+              maxlength="19"
+              pattern="[0-9\s]+"
+            >
+            <div class="card-icons">
+              <i class="fab fa-cc-visa"></i>
+              <i class="fab fa-cc-mastercard"></i>
+              <i class="fab fa-cc-amex"></i>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expiryDate">
+                Expiry Date <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="expiryDate" 
+                placeholder="MM/YY" 
+                required
+                autocomplete="cc-exp"
+                maxlength="5"
+                pattern="[0-9/]+"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="cvv">
+                CVV <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="cvv" 
+                placeholder="123" 
+                required
+                autocomplete="cc-csc"
+                maxlength="4"
+                pattern="[0-9]+"
+              >
+            </div>
+          </div>
+          
+          <div class="security-notice">
+            <i class="fas fa-lock"></i>
+            <span>Your payment information is encrypted and secure</span>
+          </div>
+        </div>
+        
+        <!-- Age Verification Section -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <i class="fas fa-calendar-check"></i>
+            Age Verification
+          </h3>
+          
+          <div class="form-group">
+            <label for="dateOfBirth">
+              Date of Birth <span class="required">*</span>
+            </label>
+            <input 
+              type="date" 
+              id="dateOfBirth" 
+              required
+              autocomplete="bday"
+              max=""
+            >
+            <span class="form-hint">You must be 18 or older to create a workspace</span>
+          </div>
+          
+          <div class="age-verification-result" id="ageVerificationResult"></div>
+        </div>
+        
+        <!-- Terms & Conditions Section -->
+        <div class="form-section">
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="termsAccepted" required>
+              <span>
+                I accept the <a href="/terms" target="_blank">Terms & Conditions</a> and 
+                <a href="/privacy" target="_blank">Privacy Policy</a> <span class="required">*</span>
+              </span>
+            </label>
+          </div>
+          
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="marketingConsent">
+              <span>
+                I would like to receive updates and promotional emails from Nuvola365
+              </span>
+            </label>
+          </div>
         </div>
         
         <div class="form-actions">
@@ -172,7 +433,7 @@
         
         <div class="form-footer">
           <i class="fas fa-info-circle"></i>
-          <span>Setup typically takes 3-5 minutes</span>
+          <span>Setup typically takes 3-5 minutes. You will not be charged until your workspace is active.</span>
         </div>
         
       </form>

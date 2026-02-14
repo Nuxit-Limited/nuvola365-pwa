@@ -50,6 +50,25 @@ function showProvisioningForm() {
   document.getElementById('welcomeScreen').classList.add('hidden');
   document.getElementById('provisioningForm').classList.remove('hidden');
   
+  // Set max date for DOB (18 years ago)
+  const eighteenYearsAgo = new Date();
+  eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+  document.getElementById('dateOfBirth').max = eighteenYearsAgo.toISOString().split('T')[0];
+  
+  // Age verification on DOB change
+  document.getElementById('dateOfBirth').addEventListener('change', validateAge);
+  
+  // Card number formatting
+  document.getElementById('cardNumber').addEventListener('input', formatCardNumber);
+  
+  // Expiry date formatting
+  document.getElementById('expiryDate').addEventListener('input', formatExpiryDate);
+  
+  // CVV validation
+  document.getElementById('cvv').addEventListener('input', function(e) {
+    this.value = this.value.replace(/\D/g, '').substring(0, 4);
+  });
+  
   // Back button
   document.getElementById('backToWelcome').addEventListener('click', () => {
     document.getElementById('provisioningForm').classList.add('hidden');
@@ -60,15 +79,93 @@ function showProvisioningForm() {
   document.getElementById('provisioningFormElement').addEventListener('submit', handleProvisioningSubmit);
 }
 
+function validateAge() {
+  const dob = new Date(this.value);
+  const today = new Date();
+  const age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  const dayDiff = today.getDate() - dob.getDate();
+  
+  const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+  
+  const resultDiv = document.getElementById('ageVerificationResult');
+  
+  if (actualAge >= 18) {
+    resultDiv.className = 'age-verification-result valid';
+    resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> Age verified: You are ' + actualAge + ' years old';
+  } else {
+    resultDiv.className = 'age-verification-result invalid';
+    resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> You must be at least 18 years old to create a workspace';
+  }
+}
+
+function formatCardNumber(e) {
+  let value = e.target.value.replace(/\s/g, '');
+  let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+  e.target.value = formattedValue.substring(0, 19);
+}
+
+function formatExpiryDate(e) {
+  let value = e.target.value.replace(/\D/g, '');
+  if (value.length >= 2) {
+    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+  }
+  e.target.value = value;
+}
+
 async function handleProvisioningSubmit(e) {
   e.preventDefault();
   
-  const orgName = document.getElementById('orgName').value.trim();
-  const adminEmail = document.getElementById('adminEmail').value.trim();
-  const desiredDomain = document.getElementById('desiredDomain').value.trim();
+  // Validate age
+  const dob = new Date(document.getElementById('dateOfBirth').value);
+  const age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
   
-  // Validate
-  if (!orgName || !adminEmail) {
+  if (age < 18) {
+    showNotification('Age Verification Failed', 'You must be at least 18 years old to create a workspace', 'error');
+    return;
+  }
+  
+  // Validate terms acceptance
+  if (!document.getElementById('termsAccepted').checked) {
+    showNotification('Terms Required', 'You must accept the Terms & Conditions to continue', 'error');
+    return;
+  }
+  
+  // Collect all form data
+  const formData = {
+    // Organization
+    organizationName: document.getElementById('orgName').value.trim(),
+    desiredDomain: document.getElementById('desiredDomain').value.trim(),
+    
+    // Admin
+    adminFirstName: document.getElementById('adminFirstName').value.trim(),
+    adminLastName: document.getElementById('adminLastName').value.trim(),
+    adminEmail: document.getElementById('adminEmail').value.trim(),
+    adminPhone: document.getElementById('adminPhone').value.trim(),
+    
+    // Billing Address
+    addressLine1: document.getElementById('addressLine1').value.trim(),
+    addressLine2: document.getElementById('addressLine2').value.trim(),
+    city: document.getElementById('city').value.trim(),
+    postalCode: document.getElementById('postalCode').value.trim(),
+    country: document.getElementById('country').value,
+    
+    // Payment (Note: In production, use Stripe/payment gateway, never store card details)
+    cardholderName: document.getElementById('cardholderName').value.trim(),
+    cardNumber: document.getElementById('cardNumber').value.replace(/\s/g, ''),
+    expiryDate: document.getElementById('expiryDate').value,
+    cvv: document.getElementById('cvv').value,
+    
+    // Age verification
+    dateOfBirth: document.getElementById('dateOfBirth').value,
+    
+    // Consent
+    termsAccepted: document.getElementById('termsAccepted').checked,
+    marketingConsent: document.getElementById('marketingConsent').checked
+  };
+  
+  // Validate all required fields
+  if (!formData.organizationName || !formData.desiredDomain || !formData.adminEmail) {
     showNotification('Validation Error', 'Please fill in all required fields', 'error');
     return;
   }
@@ -76,15 +173,11 @@ async function handleProvisioningSubmit(e) {
   // Disable submit button
   const submitBtn = document.querySelector('.btn-submit');
   submitBtn.disabled = true;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Creating...</span>';
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Processing...</span>';
   
   try {
     // Call backend API
-    const response = await initiateProvisioning({
-      organizationName: orgName,
-      adminEmail: adminEmail,
-      desiredDomain: desiredDomain || null
-    });
+    const response = await initiateProvisioning(formData);
     
     if (response.error) {
       throw new Error(response.message || 'Provisioning failed');

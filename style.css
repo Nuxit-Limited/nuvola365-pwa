@@ -50,7 +50,7 @@ body {
 .loading-screen {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, var(--nuvola-primary), var(--nuvola-secondary));
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,15 +222,27 @@ body {
   align-items: center;
 }
 
-.cta-btn.secondary {
-  background: rgba(255,255,255,0.1);
+.cta-btn.primary {
+  background: linear-gradient(135deg, var(--nuvola-primary), var(--nuvola-secondary));
   color: white;
+  box-shadow: 0 8px 24px rgba(0, 120, 212, 0.4);
+}
+
+.cta-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 120, 212, 0.5);
+}
+
+.cta-btn.secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
   border: 1px solid rgba(255,255,255,0.2);
 }
 
 .cta-btn.secondary:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
   border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.9);
 }
 
 /* ============================================
@@ -321,10 +333,44 @@ body {
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
   padding: var(--spacing-xl);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.form-section {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--nuvola-secondary);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 .form-group {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .form-group label {
@@ -336,7 +382,13 @@ body {
   color: var(--text-primary);
 }
 
-.form-group input {
+.required {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 0.875rem;
   background: var(--bg-tertiary);
@@ -347,10 +399,24 @@ body {
   transition: all 0.2s;
 }
 
-.form-group input:focus {
+.form-group select {
+  cursor: pointer;
+}
+
+.form-group select option {
+  background: var(--bg-tertiary);
+  color: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: var(--nuvola-secondary);
   background: var(--bg-primary);
+}
+
+.form-group input:invalid:not(:placeholder-shown) {
+  border-color: #f44336;
 }
 
 .form-hint {
@@ -358,6 +424,86 @@ body {
   margin-top: 0.5rem;
   font-size: 0.875rem;
   color: var(--text-muted);
+}
+
+.card-icons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  opacity: 0.5;
+}
+
+.security-notice {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.security-notice i {
+  color: #4caf50;
+}
+
+.age-verification-result {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  display: none;
+}
+
+.age-verification-result.valid {
+  display: block;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: #4caf50;
+}
+
+.age-verification-result.invalid {
+  display: block;
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: #f44336;
+}
+
+.checkbox-group {
+  margin-bottom: var(--spacing-sm);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: start;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 0.125rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-label span {
+  flex: 1;
+  line-height: 1.5;
+}
+
+.checkbox-label a {
+  color: var(--nuvola-secondary);
+  text-decoration: underline;
+}
+
+.checkbox-label a:hover {
+  color: var(--nuvola-light-blue);
 }
 
 .domain-input {
